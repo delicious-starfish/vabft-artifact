@@ -1,0 +1,50 @@
+dtype: torch.float32, repeat times: 100000
+dtype: torch.float32, repeat times: 100000
+Array size: 16, Max Relative Error: 2.886707e-07
+Array size: 32, Max Relative Error: 1.538722e-07
+Array size: 64, Max Relative Error: 1.558224e-07
+dtype: torch.float32, repeat times: 100000
+dtype: torch.float32, repeat times: 100000
+Array size: 16, Max Relative Error: 1.721709e-03
+Array size: 32, Max Relative Error: 3.563792e-03
+Array size: 64, Max Relative Error: 1.383595e-03
+dtype: torch.float32, repeat times: 100000
+Array size: 16, Max Relative Error: 1.086248e-03
+Array size: 32, Max Relative Error: 4.298658e-04
+Array size: 64, Max Relative Error: 1.053266e-03
+dtype: torch.float32, repeat times: 10000
+Array size: 16, Max Relative Error: 1.428860e-07
+Array size: 32, Max Relative Error: 1.426338e-07
+Array size: 64, Max Relative Error: 1.504221e-07
+Array size: 128, Max Relative Error: 1.530075e-07
+Array size: 256, Max Relative Error: 1.503801e-07
+Array size: 512, Max Relative Error: 1.469341e-07
+Array size: 1024, Max Relative Error: 1.526775e-07
+Array size: 2048, Max Relative Error: 1.632300e-07
+Array size: 4096, Max Relative Error: 1.546508e-07
+Array size: 8192, Max Relative Error: 1.612211e-07
+Array size: 16384, Max Relative Error: 1.544827e-07
+dtype: torch.float32, repeat times: 10000
+Array size: 16, Max Relative Error: 7.134449e-06
+Array size: 32, Max Relative Error: 1.317725e-07
+Array size: 64, Max Relative Error: 1.445794e-07
+Array size: 128, Max Relative Error: 1.566345e-07
+Array size: 256, Max Relative Error: 1.453493e-07
+Array size: 512, Max Relative Error: 1.518835e-07
+Array size: 1024, Max Relative Error: 1.582198e-07
+Array size: 2048, Max Relative Error: 1.505638e-07
+Array size: 4096, Max Relative Error: 1.702602e-07
+Array size: 8192, Max Relative Error: 1.563778e-07
+Array size: 16384, Max Relative Error: 1.550527e-07
+dtype: torch.float32, repeat times: 10000
+Array size: 16, Max Relative Error: 1.453262e-07
+Array size: 32, Max Relative Error: 1.632476e-07
+Array size: 64, Max Relative Error: 1.679341e-07
+Array size: 128, Max Relative Error: 1.753051e-07
+Array size: 256, Max Relative Error: 1.712958e-07
+Array size: 512, Max Relative Error: 1.759858e-07
+Array size: 1024, Max Relative Error: 1.781937e-07
+Array size: 2048, Max Relative Error: 1.747742e-07
+Array size: 4096, Max Relative Error: 1.714347e-07
+Array size: 8192, Max Relative Error: 1.685351e-07
+Array size: 16384, Max Relative Error: 1.708656e-07

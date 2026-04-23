@@ -1,0 +1,4 @@
+usage: -c [-h] [--device {cpu,cuda,npu}]
+          [--dtype {float64,float32,float16,bfloat16}] [--trials TRIALS]
+          [--M M] [--N N] [--K-values K_VALUES]
+-c: error: unrecognized arguments: -- --device npu --dtype bfloat16 --trials 50000

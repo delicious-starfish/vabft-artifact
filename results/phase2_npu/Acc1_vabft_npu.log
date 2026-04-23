@@ -1,0 +1,55 @@
+/home/ywc/miniconda3/envs/myLib/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /home/ywc/miniconda3/envs/myLib/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+Initialization Method: generate_matrice_normal
+Data type: torch.float32
+Bit Position: 23, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 24, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 25, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 26, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 27, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 28, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 29, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 30, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 31, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Average Error Rate over all bits: 0.000000%
+
+Initialization Method: generate_matrice_clamp
+Data type: torch.float32
+Bit Position: 23, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 24, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 25, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 26, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 27, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 28, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 29, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 30, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 31, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Average Error Rate over all bits: 0.000000%
+
+Initialization Method: generate_matrice
+Data type: torch.float32
+Bit Position: 23, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 24, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 25, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 26, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 27, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 28, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 29, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 30, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 31, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Average Error Rate over all bits: 0.000000%
+
+Initialization Method: generate_matrice_uniform
+Data type: torch.float32
+Bit Position: 23, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 24, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 25, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 26, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 27, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 28, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 29, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 30, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Bit Position: 31, Valid Trials: 1000, Errors Detected: 0, Error Rate: 0.0000%
+Average Error Rate over all bits: 0.000000%
+
+Results have been saved to 'error_injection_results.txt'

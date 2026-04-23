@@ -1,0 +1,35 @@
+dtype: torch.bfloat16, repeat times: 100000
+Array size: 32, Max Relative Error: 3.891051e-03
+Array size: 64, Max Relative Error: 3.891051e-03
+Array size: 128, Max Relative Error: 3.891051e-03
+Array size: 256, Max Relative Error: 3.891051e-03
+Array size: 512, Max Relative Error: 3.891051e-03
+Array size: 1024, Max Relative Error: 3.891051e-03
+Array size: 2048, Max Relative Error: 3.891051e-03
+Array size: 4096, Max Relative Error: 3.891051e-03
+Array size: 8192, Max Relative Error: 3.891051e-03
+Array size: 16384, Max Relative Error: 3.891051e-03
+dtype: torch.bfloat16, repeat times: 100000
+Array size: 32, Max Relative Error: 0.000000e+00
+Array size: 64, Max Relative Error: 0.000000e+00
+Array size: 128, Max Relative Error: 0.000000e+00
+Array size: 256, Max Relative Error: 0.000000e+00
+Array size: 512, Max Relative Error: 0.000000e+00
+Array size: 1024, Max Relative Error: 0.000000e+00
+dtype: torch.bfloat16, repeat times: 100000
+dtype: torch.bfloat16, repeat times: 100000
+Array size: 16, Max Relative Error: 3.891051e-03
+Array size: 32, Max Relative Error: 3.891051e-03
+Array size: 64, Max Relative Error: 3.891051e-03
+dtype: torch.bfloat16, repeat times: 100000
+Array size: 16, Max Relative Error: 3.891051e-03
+Array size: 32, Max Relative Error: 3.891051e-03
+Array size: 64, Max Relative Error: 3.891051e-03
+Array size: 128, Max Relative Error: 3.891051e-03
+Array size: 256, Max Relative Error: 3.891051e-03
+Array size: 512, Max Relative Error: 3.891051e-03
+Array size: 1024, Max Relative Error: 3.891051e-03
+Array size: 2048, Max Relative Error: 3.891051e-03
+Array size: 4096, Max Relative Error: 3.891051e-03
+Array size: 8192, Max Relative Error: 3.891051e-03
+Array size: 16384, Max Relative Error: 3.891051e-03

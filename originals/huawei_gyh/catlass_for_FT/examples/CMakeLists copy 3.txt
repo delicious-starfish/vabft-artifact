@@ -1,0 +1,233 @@
+# Copyright (c) 2025 Huawei Technologies Co., Ltd.
+# This file is a part of the CANN Open Software.
+# Licensed under CANN Open Software License Agreement Version 1.0 (the "License").
+# Please refer to the License for details. You may not use this file except in compliance with the License.
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+# See LICENSE in the root of the software repository for the full text of the License.
+
+set(CATLASS_EXAMPLES_COMMON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common)
+set(CATLASS_EXAMPLES_CUBESELF_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cube_op_self)
+
+add_custom_target(catlass_examples)
+
+macro(catlass_example_add_executable NAME AICORE_ARCH)
+    set(EXAMPLE_DESTINATION bin)
+
+    if(DEFINED ENABLE_SIMULATOR AND ENABLE_SIMULATOR)
+        set(EXAMPLE_DESTINATION bin_sim)
+    endif()
+
+    # $<$<COMPILE_LANGUAGE:ASCEND>:-DASCENDC_TRACE_ON>
+    add_executable(${NAME} ${ARGN})
+    target_compile_options(${NAME} PRIVATE $<$<COMPILE_LANGUAGE:ASCEND>:--cce-aicore-arch=${AICORE_ARCH}>)
+    target_link_libraries(${NAME} PRIVATE
+                      ${ASCEND_HOME_PATH}/lib64/libascendcl.so
+                      ${ASCEND_HOME_PATH}/lib64/libnnopbase.so
+                      ${ASCEND_HOME_PATH}/lib64/libopapi.so)
+    add_dependencies(catlass_examples ${NAME})
+    install(TARGETS ${NAME} DESTINATION ${EXAMPLE_DESTINATION} COMPONENT ${NAME})
+    install(TARGETS ${NAME} DESTINATION ${EXAMPLE_DESTINATION} COMPONENT catlass_examples)
+endmacro()
+
+# $<$<COMPILE_LANGUAGE:ASCEND>:-DASCENDC_TRACE_ON>
+add_compile_options(
+    $<$<COMPILE_LANGUAGE:ASCEND>:-Wno-macro-redefined>
+    $<$<COMPILE_LANGUAGE:ASCEND>:-Wno-ignored-attributes>
+    # $<$<COMPILE_LANGUAGE:ASCEND>:"-Xaicore-start -O3 -Xaicore-end"
+
+    "SHELL:$<$<COMPILE_LANGUAGE:ASCEND>:-mllvm -cce-aicore-stack-size=0x8000>"
+    "SHELL:$<$<COMPILE_LANGUAGE:ASCEND>:-mllvm -cce-aicore-function-stack-size=0x8000>"
+    "SHELL:$<$<COMPILE_LANGUAGE:ASCEND>:-mllvm -cce-aicore-record-overflow=true>"
+    "SHELL:$<$<COMPILE_LANGUAGE:ASCEND>:-mllvm -cce-aicore-addr-transform>"
+    "SHELL:$<$<COMPILE_LANGUAGE:ASCEND>:-mllvm -cce-aicore-dcci-insert-for-scalar=false>"
+    # "SHELL:$<$<COMPILE_LANGUAGE:ASCEND>:-Xaicore-start -g -Xaicore-end"
+    
+)
+
+# ascendc_compile_definitions(
+#     ...
+#     -DASCENDC_TRACE_ON
+# )
+
+set(INCLUDE_ACLNN_BASE_ROOT_DIR "${ASCEND_HOME_PATH}/include")
+include_directories(
+    ${CATLASS_EXAMPLES_COMMON_SOURCE_DIR}
+    ${CATLASS_EXAMPLES_CUBESELF_SOURCE_DIR}
+    ${CATLASS_INCLUDE_DIR}
+    ${INCLUDE_ACLNN_BASE_ROOT_DIR}/aclnn
+)
+link_directories(${ASCEND_HOME_PATH}/lib64)
+link_libraries(dl tiling_api platform c_sec nnopbase ascendcl m)
+
+if(DEFINED ENABLE_ASCENDC_DUMP AND ENABLE_ASCENDC_DUMP)
+    add_compile_definitions(ENABLE_ASCENDC_DUMP)
+    add_compile_definitions(ASCENDC_DUMP=1)
+    add_compile_definitions(ASCENDC_DEBUG)
+    link_libraries(ascend_dump)
+endif()
+
+foreach(EXAMPLE
+    00_basic_matmul
+    01_batched_matmul
+    02_grouped_matmul_slice_m
+    03_matmul_add
+    03_matmul_fault
+    03_matmul_add_self_impl
+    03_matmul_add_self_bf
+    03_matmul_add_self_float
+    03_matmul_add_self_fp16
+    03_matmul_add_gen_golden
+    03_matmul_add_ft_case_compare
+    03_matmul_add_ft_case_ground
+    03_matmul_fault_impl
+    03_matmul_fault_opti
+    04_padding_matmul
+    05_grouped_matmul_slice_k
+    06_optimized_matmul
+    07_grouped_matmul_slice_m_per_token_dequant_moe
+    08_grouped_matmul
+    09_splitk_matmul
+    10_grouped_matmul_slice_m_per_token_dequant
+    11_grouped_matmul_slice_k_per_token_dequant
+    12_quant_matmul
+    13_basic_matmul_tla
+    14_optimized_matmul_tla
+    15_gemm
+    16_group_gemm
+    17_gemv_aiv
+    17_compare_aiv
+    17_threshold_aiv
+    17_slicesum_aiv
+    17_aclnn_dmr_baseline
+    18_gemv_aic
+    18_gemv_aic_ft
+    18_gemv_aic_ft_col
+    18_gemv_aic_ft_col_bf
+    18_gemv_ft_case_test
+    18_gemv_ft_case_test_total_aiv
+    18_gemv_ft_double_thre_total_aiv
+    18_gemv_ft_double
+    18_gemv_ft_double_thre
+    18_matmul_ft_double
+    19_aclnn_abft_baseline
+    18_gemv_ft_double_total_aiv 
+    18_matmul_ft_double_total_aiv
+    18_matmul_ft_double_thre
+    18_matmul_ft_double_thre_total_aiv
+    18_gemv_ft_case_test_thre
+    18_gemv_ft_case_test_thre_total_aiv
+    18_matmul_ft_double_no_splitk
+    18_matmul_ft_double_thre_no_splitk
+    18_matmul_ft_double_thre_comp_fused
+    18_matmul_ft_double_thre_no_splitk_roofline
+    18_matmul_ft_double_thre_no_splitk_a_abft
+    18_matmul_ft_double_thre_no_splitk_asvar_ft
+    18_matmul_ft_double_thre_no_splitk_asvar_ft_relieve
+    18_matmul_ft_double_thre_no_splitk_asvar_ft_relieve_fp16
+    18_matmul_ft_double_thre_splitk_aic_test
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_relieve_fp16
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_relieve_fp16_small
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_relieve_fp16_medium
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_relieve_fp16_large
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_small
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_medium
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_large
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_bf16_large
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_bf16_medium
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_split_bf16_large
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_split_bf16_medium
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_bf16_medium_simple
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_bf16_small_simple
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_bf16_small
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp32_small_simple
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp32_medium
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp32_large
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_small_simple
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_medium_simple
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_medium_robust
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_large_robust
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_medium_simple_simpling
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_small_simple_simpling
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_large_simple_simpling
+    19_mla
+    20_matmul_bias
+    21_basic_matmul_preload_zN
+    22_padding_splitk_matmul
+    23_flash_attention_infer
+    09_splitk_matmul_self_fp16
+    09_splitk_matmul_self_aic_preload_fp16
+    09_splitk_matmul_self_blk_red_fp16
+    09_splitk_matmul_self_blk_red_preload_fp16
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_fused_fp16_medium_simplified
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_fused_fp16_medium_robust
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_fp16_medium_simplified
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_fp16_medium_robust
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_fp16_small_simplified
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_fp16_small_robust
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_fp16_large_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_fp16_medium_simple
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_fp16_medium_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_fp16_medium_simplified
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_fp16_medium_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_fp16_small_simple
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_fp16_small_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_fp16_large_simple
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_fp16_large_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_fp16_small_simplified
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_fp16_small_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_fp16_large_simplified
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_fp16_large_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_bf16_medium_simple
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_bf16_medium_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_bf16_small_simple
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_bf16_small_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_bf16_large_simple
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_bf16_large_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_bf16_medium_simplified
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_bf16_medium_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_bf16_small_simplified
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_bf16_small_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_bf16_large_simplified
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_bf16_large_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_fp32_small_simple
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_fp32_small_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_fp32_medium_simple
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_fp32_medium_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_fp32_large_simple
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_spec_fp32_large_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_fp32_small_simplified
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_fp32_small_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_fp32_medium_simplified
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_fp32_medium_robust
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_fp32_large_simplified
+    18_matmul_ft_abe_aic_thre_splitk_asvar_ft_auged_fp32_large_robust
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_small_simple_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_medium_simple_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_medium_robust_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp16_large_robust_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_bf16_small_simple_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_bf16_small_robust_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_bf16_medium_robust_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_bf16_medium_simple_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_bf16_large_robust_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp32_large_robust_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp32_medium_robust_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_spec_fp32_small_simple_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_fp16_medium_simplified_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_fp16_medium_robust_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_fp16_small_simplified_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_fp16_small_robust_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_fp16_large_robust_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_bf16_medium_simplified_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_bf16_medium_robust_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_bf16_small_simplified_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_bf16_small_robust_inited
+    18_matmul_ft_abe_aic_thre_no_splitk_asvar_ft_auged_bf16_large_robust_inited
+)
+    add_subdirectory(${EXAMPLE})
+endforeach()
+
+add_subdirectory(shared_lib)
+add_subdirectory(python_extension)

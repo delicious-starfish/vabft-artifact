@@ -1,0 +1,23 @@
+====================================================================================================
+e_max OFFLINE Measurement — fixed M=1024, N=256, sweep K (both paths use low precision)
+====================================================================================================
+Date:    2026-04-07 22:09:19
+Device:  cuda
+Dtype:   torch.float16  (u = 4.8828e-04)
+Trials:  50000 per K value
+K sweep: [256, 512, 1024, 2048, 4096, 8192, 16384]
+====================================================================================================
+
+K        max(e_max)     max/u      p99.9          p99.9/u    mean           mean/u    
+--------------------------------------------------------------------------------------
+Testing K=256...Traceback (most recent call last):
+  File "/home/gyh/test_emax_offline.py", line 184, in <module>
+    main()
+  File "/home/gyh/test_emax_offline.py", line 134, in main
+    res = measure_emax_offline(M, K, N, dtype, device, num_trials=args.trials)
+  File "/home/gyh/test_emax_offline.py", line 27, in measure_emax_offline
+    A_lp = A_f32.to(dtype).to(device)
+  File "/home/gyh/.local/lib/python3.9/site-packages/torch/cuda/__init__.py", line 310, in _lazy_init
+    raise AssertionError("Torch not compiled with CUDA enabled")
+AssertionError: Torch not compiled with CUDA enabled
+[ERROR] 2026-04-07-22:09:19 (PID:973738, Device:-1, RankID:-1) ERR99999 UNKNOWN applicaiton exception

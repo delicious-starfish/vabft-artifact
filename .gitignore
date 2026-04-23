@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+
+# Skip large reproduction trace dumps (rebuild on demand)
+*.npy
+*.npz
+*.pt
+*.pth
