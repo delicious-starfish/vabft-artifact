@@ -18,6 +18,7 @@
 | 0.10 | 88.2%        | 11.0%        | 98.2%      | 0.3%       |
 """
 
+import os
 import torch
 import torch_npu
 import math
@@ -119,7 +120,7 @@ for mag in ERROR_MAGS:
     print(f"{mag:<6} {lin['worst']:>9.1f}% {lin['range']:>9.1f}% {sinh['worst']:>10.1f}% {sinh['range']:>10.1f}%")
 
 # 保存 JSON
-out = '/home/gyh/V-ABFT_TEST/results_phase2/F1_encoding_ablation.json'
+out = os.path.join(os.environ.get('VABFT_ROOT', '.'), 'results_phase2', 'F1_encoding_ablation.json')
 with open(out, 'w') as f:
     json.dump(results, f, indent=2)
 print(f"\nSaved: {out}")

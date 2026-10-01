@@ -1,6 +1,6 @@
 """V-ABFT FPR test on the CLEAN LLM dataset (checksum_llm_data, not data1).
 
-Loads all (a, b) matrix pairs from `/home/gyh/checksum_llm_data/{atte_c,atte_r,mlp_r}/`
+Loads all (a, b) matrix pairs from `$LLM_DATA_ROOT/{atte_c,atte_r,mlp_r}/` (set LLM_DATA_ROOT)
 and runs `utils.FT_matmul` (default = my_bound_improve_robust = V-ABFT).
 
 A "failure" here = false positive, since these are real LLM matrices with no injected error.
@@ -17,9 +17,9 @@ import utils
 
 device = torch.device('npu:0' if torch_npu.npu.is_available() else 'cpu')
 
-DATA_ROOT = '/home/gyh/checksum_llm_data'
+DATA_ROOT = os.environ.get('LLM_DATA_ROOT', './checksum_llm_data')
 SUBDIRS = ['atte_c', 'atte_r', 'mlp_r']
-LOG_PATH = '/home/gyh/V-ABFT_TEST/results_phase2/E1_fpr_clean.log'
+LOG_PATH = os.path.join(os.environ.get('VABFT_ROOT', '.'), 'results_phase2', 'E1_fpr_clean.log')
 
 os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
 

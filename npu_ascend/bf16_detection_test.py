@@ -4,6 +4,7 @@ A, B initialized in BF16, GEMM computed in FP32.
 Bit-flips injected on BF16-visible bits (0-15).
 """
 
+import os
 import torch
 import torch_npu
 import utils
@@ -197,7 +198,7 @@ for config_name, (M, K, N) in configs.items():
         'e2e_vabft': res_e2e_v,
         'e2e_aabft': res_e2e_a,
     }
-    path = f'/home/gyh/V-ABFT_TEST/bf16_e2e_{config_name}.json'
+    path = os.path.join(os.environ.get('VABFT_ROOT', '.'), f'bf16_e2e_{config_name}.json')
     with open(path, 'w') as f:
         json.dump(out, f, indent=2)
     print(f"  Saved to {path}")

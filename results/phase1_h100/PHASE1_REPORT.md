@@ -1,4 +1,4 @@
-# Phase 1 — H100_l GPU/CPU 复现验证报告
+# Phase 1 — <gpu-host> GPU/CPU 复现验证报告
 
 **运行时间**: 2026-04-21 15:55:25 → 21:29:08 (5h 34min)
 **硬件**: NVIDIA H100 80GB HBM3 + Intel Xeon CPU

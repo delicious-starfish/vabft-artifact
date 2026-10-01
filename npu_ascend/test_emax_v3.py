@@ -1,3 +1,4 @@
+import os
 import torch
 import torch_npu
 import math
@@ -67,7 +68,7 @@ r2_sqrt = 1 - np.sum((emax_values - y_pred_sqrt)**2) / np.sum((emax_values - np.
 print(f'\ne_max = {coef_log:.6e} * log(KN) + {intercept_log:.6e}, R² = {r2_log:.6f}', flush=True)
 print(f'e_max = {coef_sqrt:.6e} * sqrt(KN) + {intercept_sqrt:.6e}, R² = {r2_sqrt:.6f}', flush=True)
 
-output_file = '/home/gyh/V-ABFT_TEST/emax_scaling_results.txt'
+output_file = os.path.join(os.environ.get('VABFT_ROOT', '.'), 'emax_scaling_results.txt')
 with open(output_file, 'w') as f:
     f.write(f'e_max Scaling Test Results - {datetime.now()}\n')
     f.write('=' * 80 + '\n\n')

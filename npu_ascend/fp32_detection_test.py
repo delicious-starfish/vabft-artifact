@@ -8,6 +8,7 @@ import torch
 import torch_npu
 import utils
 import json
+import os
 import sys
 
 device = utils.device_npu
@@ -204,7 +205,9 @@ for config_name, (M, K, N) in configs.items():
         'e2e_vabft': res_e2e_v,
         'e2e_aabft': res_e2e_a,
     }
-    path = f'/home/gyh/V-ABFT_TEST/fp32_e2e_{config_name}.json'
+    out_dir = os.environ.get('VABFT_OUT_DIR', os.environ.get('VABFT_ROOT', '.'))
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, f'fp32_e2e_{config_name}.json')
     with open(path, 'w') as f:
         json.dump(out, f, indent=2)
     print(f"\n  Saved to {path}")

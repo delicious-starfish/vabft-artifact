@@ -73,7 +73,7 @@ def main():
     parser.add_argument('--K', type=str, default='256,512,1024,2048,4096,8192,16384')
     parser.add_argument('--M', type=int, default=1024)
     parser.add_argument('--N', type=int, default=256)
-    parser.add_argument('--out', default='/home/gyh/V-ABFT_TEST/results_phase2/B4_emax_npu_lowprec.json')
+    parser.add_argument('--out', default=os.path.join(os.environ.get('VABFT_ROOT', '.'), 'results_phase2', 'B4_emax_npu_lowprec.json'))
     args = parser.parse_args()
 
     dtype = torch.bfloat16 if args.dtype == 'bfloat16' else torch.float16

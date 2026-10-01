@@ -3,9 +3,9 @@
 完整覆盖论文 `main_ieee.tex` 中的所有数值 claim，按可复现性分类。
 
 **分类标记**：
-- 🟢 **GPU 公开可复现** (在 H100_l 上重跑即可)
-- 🟡 **NPU 私有硬件** (在 HuaWei-gyh 上重跑，论文 PDF 内含数据，AD 附录写 N/A)
-- 🔵 **生产数据** (Huawei 内部生产 NPU 日志或 CANN 算子，无法复现)
+- 🟢 **GPU 公开可复现** (在 <gpu-host> 上重跑即可)
+- 🟡 **NPU 私有硬件** (在 <npu-host> 上重跑，论文 PDF 内含数据，AD 附录写 N/A)
+- 🔵 **生产数据** (厂商生产环境 NPU 日志或 CANN 算子，无法复现)
 - ⚪ **理论 claim** (数学证明，无需运行代码)
 - 🟣 **小规模已验证** (本次会话已抽样验证通过)
 
@@ -25,7 +25,7 @@
 | 1024² | 1.42e-10 | 3.03e-12 | 468× | 10× |
 | 2048² | 5.95e-10 | 7.46e-12 | 692× | 9× |
 
-**复现命令** (H100_l):
+**复现命令** (<gpu-host>):
 ```bash
 python test_final_comparison.py --dtype float64
 ```
@@ -40,7 +40,7 @@ python test_final_comparison.py --dtype float64
 | 1024² | 1.52e-1 | 1.43e-3 | 971× | 9× |
 | 2048² | 6.40e-1 | 3.56e-3 | 1451× | 8× |
 
-**复现命令** (H100_l):
+**复现命令** (<gpu-host>):
 ```bash
 python test_final_comparison.py --dtype float32
 ```
@@ -57,7 +57,7 @@ python test_final_comparison.py --dtype float32
 
 **已验证 (10 trials)**: 128² → 859×/54×, 256² → 1700×/53× ✓
 
-**复现命令** (H100_l):
+**复现命令** (<gpu-host>):
 ```bash
 python test_lowprec_comparison.py --dtype bfloat16 --trials 100
 ```
@@ -85,7 +85,7 @@ python test_lowprec_comparison.py --dtype bfloat16 --trials 100
 | GPU H100 | BF16 | ~1.4 | — | — | constant |
 | GPU H100 | FP16 | ~1.4 | — | — | constant |
 
-**复现命令** (H100_l):
+**复现命令** (<gpu-host>):
 ```bash
 # GPU/CPU FP64/FP32 (50k GPU trials, 5k CPU trials)
 python test_emax_cpu_gpu_v2.py --device cuda --dtype float64 --num_trials 50000
@@ -105,9 +105,9 @@ python test_emax_gpu_lowprec.py --dtype float16
 | FP16 | 1×10⁻³ | ~2.0 | 无 (constant) |
 | FP32 | 2×10⁻⁶ √(K/1024) | ~34√(K/1024) | 是 (∝√K) |
 
-**复现命令** (HuaWei-gyh):
+**复现命令** (<npu-host>):
 ```bash
-cd /home/gyh/V-ABFT_TEST
+cd $VABFT_ROOT
 source run_endtoend.sh
 python test_emax_v3.py
 python test_emax_scaling_v2.py
@@ -139,7 +139,7 @@ python fit_emax_growth.py  # 输入 B.1 数据，输出 a, b, R²
 | FP32 紧度 | 284–1451× | 8–25× |
 | 复杂度 | O(pn) | O(n) |
 
-**复现命令** (H100_l):
+**复现命令** (<gpu-host>):
 ```bash
 python test_aabft_vs_vabft_corrected.py --dtype float64
 ```
@@ -161,9 +161,9 @@ python test_aabft_vs_vabft_corrected.py --dtype float64
 - 检测率: 4 distributions × 16 bits × 100 trials = 6400 注入实验
 - 端到端成功率: 同上规模
 
-**复现命令** (HuaWei-gyh):
+**复现命令** (<npu-host>):
 ```bash
-cd /home/gyh/V-ABFT_TEST
+cd $VABFT_ROOT
 source run_endtoend.sh
 python bf16_detection_test.py             # V-ABFT
 python run_e2e_npu_original_aabft.py      # A-ABFT (原版公式)
@@ -182,13 +182,13 @@ python fp32_detection_test.py             # FP32 端到端
 | GPT-2 | 5,379 | 0% | — |
 | ViT-B/32 | 5,937 (50 epochs 1% 抽样) | 0% | — |
 
-**数据位置** (HuaWei-gyh):
-- `/home/gyh/checksum_llm_data/{atte_c,atte_r,mlp_r}/` — LLM 矩阵 dump
-- `/home/gyh/checksum_llm_data1/`
+**数据位置** (<npu-host>):
+- `$LLM_DATA_ROOT/{atte_c,atte_r,mlp_r}/` — LLM 矩阵 dump
+- `$LLM_DATA_ROOT_FAULTY/`
 
-**复现命令** (HuaWei-gyh):
+**复现命令** (<npu-host>):
 ```bash
-cd /home/gyh/V-ABFT_TEST
+cd $VABFT_ROOT
 python test_fpr.py  # 模拟数据 FPR 测试 (3 distributions)
 # 真实模型 FPR 测试需运行单独脚本（待补 - 见下方 Gap 列表）
 ```
@@ -205,13 +205,13 @@ python test_fpr.py  # 模拟数据 FPR 测试 (3 distributions)
 | 0.07 | 74.3% | 21.0% | 90.7% | 1.7% |
 | 0.10 | 88.2% | 11.0% | 98.2% | 0.3% |
 
-**复现命令** (HuaWei-gyh):
+**复现命令** (<npu-host>):
 ```bash
-# 需要确认对应脚本（HuaWei-gyh 上未直接找到 sinh ablation 脚本）
+# 需要确认对应脚本（<npu-host> 上未直接找到 sinh ablation 脚本）
 # 推测：encoding_utils.py + 自编 ablation runner
 ```
 
-⚠ **Gap**: HuaWei-gyh 未直接发现编码消融脚本，可能需补写或定位到旧版本。
+⚠ **Gap**: <npu-host> 未直接发现编码消融脚本，可能需补写或定位到旧版本。
 
 ---
 
@@ -246,13 +246,11 @@ python test_fpr.py  # 模拟数据 FPR 测试 (3 distributions)
   - 缺失进位: **24.1%**
   - 复合错误: **4.0%**
 
-**数据来源**: Huawei 内部生产 NPU 故障日志（应位于 `/home/gyh/V-ABFT_TEST/extra-info/data-dump/`）
+**数据来源**: 厂商提供的生产环境 NPU 故障日志归档（非公开数据，不可再分发）
 
-**位置** (HuaWei-gyh):
-- `/home/gyh/V-ABFT_TEST/extra-info/data-dump/0/exception_info.2.0.*` — 异常日志原始数据
-- `/home/gyh/check_log.txt`, `/home/gyh/check_log4.txt` — 检测日志
+**位置**: 内部归档，未随 artifact 发布
 
-⚠ **不可独立复现**: 需访问 Huawei 故障 NPU 卡和日志归档。AD 附录写 N/A。
+⚠ **不可独立复现**: 需访问厂商故障 NPU 卡与日志归档，数据不可再分发。AD 附录写 N/A。
 
 ---
 
@@ -285,13 +283,13 @@ python test_fpr.py  # 模拟数据 FPR 测试 (3 distributions)
 
 | 等级 | 类别 | 命令 | 服务器 | 预估耗时 |
 |------|-----|------|--------|---------|
-| **P0** | A.1, A.2, A.3 (Table 1) | `test_final_comparison.py + test_lowprec_comparison.py` | H100_l | ~30 min |
-| **P0** | B.1, B.3 (Eq 6-7 + Appendix B) | `test_emax_cpu_gpu_v2.py + fit_emax_growth.py` | H100_l | ~90 min |
-| **P0** | C.1, C.2 (Appendix C) | `test_aabft_vs_vabft_corrected.py` | H100_l | ~5 min |
-| **P1** | B.2 (NPU emax) | `test_emax_v3.py` | HuaWei-gyh | ~30 min |
-| **P1** | D (Figure 2) | `bf16_detection_test.py + run_e2e_npu_original_aabft.py` | HuaWei-gyh | ~3 hr |
-| **P1** | E (FPR test) | `test_fpr.py` + LLM 数据脚本 (待补) | HuaWei-gyh | ~30 min |
-| **P2** | F (Table 3 编码消融) | 需定位/补写 | HuaWei-gyh | TBD |
+| **P0** | A.1, A.2, A.3 (Table 1) | `test_final_comparison.py + test_lowprec_comparison.py` | <gpu-host> | ~30 min |
+| **P0** | B.1, B.3 (Eq 6-7 + Appendix B) | `test_emax_cpu_gpu_v2.py + fit_emax_growth.py` | <gpu-host> | ~90 min |
+| **P0** | C.1, C.2 (Appendix C) | `test_aabft_vs_vabft_corrected.py` | <gpu-host> | ~5 min |
+| **P1** | B.2 (NPU emax) | `test_emax_v3.py` | <npu-host> | ~30 min |
+| **P1** | D (Figure 2) | `bf16_detection_test.py + run_e2e_npu_original_aabft.py` | <npu-host> | ~3 hr |
+| **P1** | E (FPR test) | `test_fpr.py` + LLM 数据脚本 (待补) | <npu-host> | ~30 min |
+| **P2** | F (Table 3 编码消融) | 需定位/补写 | <npu-host> | TBD |
 | **N/A** | G, H (生产数据) | 不可独立复现 | — | — |
 | **N/A** | I (理论) | 数学审阅 | — | — |
 
@@ -299,20 +297,20 @@ python test_fpr.py  # 模拟数据 FPR 测试 (3 distributions)
 
 ## 已发现的 Gap (需要补充)
 
-1. **F (编码消融)**: HuaWei-gyh 上无直接的 sinh-vs-linear ablation 脚本，可能需要定位旧脚本或补写
-2. **E.1-E.3 (真实模型 FPR)**: `test_fpr.py` 只做了模拟数据 (3 distributions × N(1e-6,1)/N(1,1)/U(-1,1))，未直接读取 LLaMA/GPT-2/ViT 矩阵 dump。需要补写一个加载 `/home/gyh/checksum_llm_data/` 矩阵的 FPR 测试脚本
-3. **H (生产错误分析)**: 需要确认 `extra-info/data-dump/0/exception_info.*` 是否包含错误类型分类的原始数据
+1. **F (编码消融)**: <npu-host> 上无直接的 sinh-vs-linear ablation 脚本，可能需要定位旧脚本或补写
+2. **E.1-E.3 (真实模型 FPR)**: `test_fpr.py` 只做了模拟数据 (3 distributions × N(1e-6,1)/N(1,1)/U(-1,1))，未直接读取 LLaMA/GPT-2/ViT 矩阵 dump。需要补写一个加载 `$LLM_DATA_ROOT/` 矩阵的 FPR 测试脚本
+3. **H (生产错误分析)**: 需要确认 厂商故障日志归档 是否包含错误类型分类的原始数据
 
 ---
 
 ## 建议执行顺序
 
-**阶段 1 — H100_l GPU 全量复现 (P0, ~2hr)**
+**阶段 1 — <gpu-host> GPU 全量复现 (P0, ~2hr)**
 1. e_max 标定 → 拟合公式
 2. Table 1 全精度紧度 (FP64/FP32/BF16)
 3. A-ABFT 公式验证
 
-**阶段 2 — HuaWei-gyh NPU 端到端 (P1, ~3-4hr)**
+**阶段 2 — <npu-host> NPU 端到端 (P1, ~3-4hr)**
 1. NPU e_max 标定
 2. Figure 2 端到端 (BF16/FP32)
 3. test_fpr.py 模拟 FPR

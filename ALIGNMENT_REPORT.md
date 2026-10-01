@@ -1,8 +1,8 @@
 # V-ABFT 论文数据对齐报告 (Paper vs Reproduction)
 
 **生成时间**: 2026-04-22  
-**Phase 1**: H100_l GPU/CPU (5h 34min)  
-**Phase 2**: HuaWei-gyh NPU (2h 57min)
+**Phase 1**: <gpu-host> GPU/CPU (5h 34min)  
+**Phase 2**: <npu-host> NPU (2h 57min)
 
 对齐标准：✅ 完全匹配 (≤5% 偏差) / ⚠ 部分匹配 / ❌ 不匹配
 
@@ -89,7 +89,7 @@
 | BF16 | ~1.4 | **1.20–1.38** (constant) | constant | constant | ✅ |
 | FP16 | ~1.4 | **1.20–1.37** (constant) | constant | constant | ✅ |
 
-**原始数据来源** (找回 H100_l 上的论文原始脚本和 50k trials 日志):
+**原始数据来源** (找回 <gpu-host> 上的论文原始脚本和 50k trials 日志):
 - 脚本: `originals/h100_l/scripts/test_emax_offline.py` (使用 `torch.abs(torch.randn()) + 0.5` 分布，offline 双低精度路径)
 - 日志: `originals/h100_l/logs/emax_offline_bf16.log` (BF16 max/u K=256→4096 = 1.38, 1.32, 1.28, 1.25, 1.24)
 - 日志: `originals/h100_l/logs/emax_offline_fp16.log` (FP16 max/u K=256→4096 = 1.37, 1.30, 1.27, 1.25, 1.23)
@@ -195,8 +195,8 @@
 | V-ABFT FPR (ViT-B/32, 5937 matrices) | 0% | (未独立验证) | — |
 
 **澄清** `check_log.txt` 误导线索：
-- 之前看到的 `check_log.txt` (atte_c 10/11 失败) 测的是 `/home/gyh/checksum_llm_data1/`（带 `1`），其内部还有 `check_wrong_log.txt`，是**故意含错的检测能力测试集**
-- 论文 FPR 测的是干净数据集 `/home/gyh/checksum_llm_data/` (无 `1`)
+- 之前看到的 `check_log.txt` (atte_c 10/11 失败) 测的是 `$LLM_DATA_ROOT_FAULTY/`（带 `1`），其内部还有 `check_wrong_log.txt`，是**故意含错的检测能力测试集**
+- 论文 FPR 测的是干净数据集 `$LLM_DATA_ROOT/` (无 `1`)
 - 用 V-ABFT (`utils.FT_matmul` 默认走 `my_bound_improve_robust`) 在干净集上实测：
   - atte_c: 11/11 通过, FPR=0%
   - atte_r: 56/56 通过, FPR=0%
@@ -277,15 +277,15 @@
 
 **G. 性能从 🔵→—**：发现 `originals/huawei_gyh/catlass_for_FT/` 包含 V-ABFT NPU 内核源代码（22M，含 Figure 4 用的 `*_chunk_inited` kernel + Figure 2 用的 `bf16_inject` kernel），代码可公开但需 CANN 8.2 编译环境，未在本地复现。
 
-**H. 生产错误**：仍是 Huawei 内部 NPU 故障日志，私有数据。
+**H. 生产错误**：仍是 厂商 NPU 故障日志，私有数据。
 
 ---
 
 ## 待办事项
 
-1. **F. 编码消融** (6 cells): 在 HuaWei-gyh 上跑 `test_encoding_ablation.py` (~30min)
+1. **F. 编码消融** (6 cells): 在 <npu-host> 上跑 `test_encoding_ablation.py` (~30min)
 2. **D.1 Figure 2 BF16 精确对齐**: 对照论文 Figure 2 数据与 D.1 JSON 输出
-3. **E.2-E.3 GPT-2/ViT FPR**: 当前只有 LLaMA-7B 矩阵集，GPT-2/ViT 的 .pth 数据未在 HuaWei-gyh 找到
+3. **E.2-E.3 GPT-2/ViT FPR**: 当前只有 LLaMA-7B 矩阵集，GPT-2/ViT 的 .pth 数据未在 <npu-host> 找到
 
 ## 已解决待办（2026-04-23）
 

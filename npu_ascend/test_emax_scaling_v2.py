@@ -4,6 +4,7 @@
 理论预测：FP32 的 e_max 应随累加深度增长，拟合对 log(KN) 和 sqrt(KN) 的关系
 """
 
+import os
 import torch
 import torch_npu
 import math
@@ -131,7 +132,7 @@ def main():
         print(f"→ sqrt(KN) 模型拟合更好 (R^2 = {r2_sqrt:.6f} vs {r2_log:.6f})")
 
     # 保存结果
-    output_file = "/home/gyh/V-ABFT_TEST/emax_scaling_results.txt"
+    output_file = os.path.join(os.environ.get('VABFT_ROOT', '.'), 'emax_scaling_results.txt')
     with open(output_file, 'w') as f:
         f.write(f"e_max Scaling Test Results - {datetime.now()}\n")
         f.write("=" * 80 + "\n\n")

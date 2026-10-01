@@ -82,11 +82,17 @@ def my_bound_improve(a, b):
     bound = bound.squeeze()
     return bound
 
-def my_bound_improve_robust(a, b, dtype=torch.bfloat16):
+def my_bound_improve_robust(a, b, dtype=torch.bfloat16, e_max=None, c_sigma=None):
+    # e_max: 实测最大相对舍入误差，去除人为安全余量。fp32 K=1024 实测 1.377e-6（fit_emax_growth.py）。
+    #        传 e_max 可覆盖（如 old 口径 2e-6）以做同图对比。
     us = {torch.bfloat16: 8e-3,
           torch.float16: 1e-3,
-          torch.float32: 2e-06}
-    e = us[dtype]
+          torch.float32: 1.377e-06,
+          torch.float64: 7.5e-16}   # fp64 GPU/H100 实测推荐值（~6.7× unit roundoff 2^-53，含累加；flat 不 √K）
+    e = us[dtype] if e_max is None else e_max
+    # c_sigma: Azuma–Hoeffding 尾界 c_σ=sqrt(2·ln(2/δ))，δ=1e-6 → 5.39（严格无分布保证，
+    #          取代 Chebyshev 84%@2.5）。传 c_sigma 可覆盖（如 old 口径 2.5）。
+    cs = 5.39 if c_sigma is None else c_sigma
     k = a.shape[-1]
     n = b.shape[-1]
     if dtype == torch.float32:
@@ -112,8 +118,8 @@ def my_bound_improve_robust(a, b, dtype=torch.bfloat16):
     
     bound = e * (
         n * mu_a * sum_mu_b
-        +  2.5 * n * torch.sqrt(mu_a**2 * sum_sigma_b2 / n + sigma_a2 * sum_mu_b2)
-        +  2.5 * sqrt_n * sigma_a2.sqrt() * sum_sigma_b2.sqrt()
+        +  cs * n * torch.sqrt(mu_a**2 * sum_sigma_b2 / n + sigma_a2 * sum_mu_b2)
+        +  cs * sqrt_n * sigma_a2.sqrt() * sum_sigma_b2.sqrt()
     )
     
     bound = bound.squeeze()
@@ -287,8 +293,8 @@ def FT_matmul(a, b, FT_algorithm=my_bound_improve_robust_sampling2):
                 else:
                     # print(i, j, k)
                     # save a_block and b_block for debugging
-                    # torch.save(a_block, "/home/gyh/data/a_block_error.pth")
-                    # torch.save(b_block, "/home/gyh/data/b_block_error.pth")
+                    # torch.save(a_block, "./data/a_block_error.pth")
+                    # torch.save(b_block, "./data/b_block_error.pth")
                     # raise ValueError("FT_matmul: Error bound exceeded during block multiplication.")
                     error_msg = f"Block fail at i={i}, j={j}, k={k}. Max diff: {diff.max().item()}"
                     success = False
@@ -441,3 +447,107 @@ def aabft_corrected(a, b, c, use_high_precision_check=True):
 
     threshold = (E1 + E2 + E3 + E4).to(torch.float32)
     return checksum.to(torch.float32), threshold
+
+
+# =============================================================================
+# Baseline threshold methods for the unified comparison table
+# (Higham forward-error bound & SEA-ABFT), added for baseline_compare.py.
+# Both return a per-row (M,) threshold on the SAME row checksum diff
+#   D1[i] = A[i,:] . (sum_col B) - sum_col C[i,:]
+# so they are directly comparable with aabft_corrected / my_bound_improve_robust.
+# Pure torch, device-agnostic; the bound is accumulated in float64 for stability.
+# =============================================================================
+
+# Unit roundoff u (= 2^-(t+1), t = stored mantissa bits) per dtype.
+_UNIT_ROUNDOFF = {torch.float64: 2.0 ** -53,
+                  torch.float32: 2.0 ** -24,
+                  torch.float16: 2.0 ** -11,
+                  torch.bfloat16: 2.0 ** -8}
+# Machine epsilon eps_M (= 2^-t = 2u) per dtype, used by SEA-ABFT.
+_MACHINE_EPS = {torch.float64: 2.0 ** -52,
+                torch.float32: 2.0 ** -23,
+                torch.float16: 2.0 ** -10,
+                torch.bfloat16: 2.0 ** -7}
+
+
+def higham_bound(a: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
+    """Higham forward-error row bound for the checksum difference D1.
+
+    Row-wise version of the classical forward error bound
+    ``||C - Chat||_p <= gamma_n ||A||_p ||B||_p`` (Higham, *Accuracy and
+    Stability of Numerical Algorithms*). For the row checksum diff
+    ``D1[i] = A[i,:].(sum_col B) - sum_col C[i,:]`` the componentwise bound is::
+
+        T[i] = gamma_K * sum_k |A[i,k]| * (sum_j |B[k,j]|),
+        gamma_K = K * u / (1 - K * u),
+
+    where ``u`` is the unit roundoff of ``a.dtype`` (fp32 ``2^-24``, bf16
+    ``2^-8``, fp64 ``2^-53``). ``gamma_K`` is only valid while ``K*u < 1``; when
+    ``K*u >= 1`` (e.g. bf16 with large K) the forward-error bound is vacuous and
+    ``+inf`` is returned for every row, matching the theory (Higham's bound
+    provides no guarantee in that regime).
+
+    Args:
+        a: Left operand, shape ``(M, K)``.
+        b: Right operand, shape ``(K, N)``.
+
+    Returns:
+        Per-row threshold tensor of shape ``(M,)`` (float64, on ``a.device``).
+    """
+    u = _UNIT_ROUNDOFF[a.dtype]
+    k = a.shape[-1]
+    ku = k * u
+    a_abs = a.to(torch.float64).abs()                 # (M, K)
+    b_abs_rowsum = b.to(torch.float64).abs().sum(dim=-1)  # (K,) = sum_j |B[k,j]|
+    row = a_abs @ b_abs_rowsum                        # (M,) = sum_k |A[i,k]|*(sum_j|B[k,j]|)
+    gamma_k = float("inf") if ku >= 1.0 else ku / (1.0 - ku)
+    return gamma_k * row
+
+
+def sea_bound(a: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
+    """SEA-ABFT (Simplified Error Analysis) row bound for the checksum diff D1.
+
+    Faithful to Roy-Chowdhury & Banerjee's simplified error analysis for the
+    checksum test (FTCS-23 1993 / IEEE ToC 1996), matching the reference
+    implementation in ``test_aabft_paper_reproduction.py``. Their tolerance for
+    verifying ``y = M x`` with a column-checksum row ``M_{m+1} = sum_i M_i`` is::
+
+        tau = [ (n + 2m - 2) * ||x||_2 * sum_i ||M_i||_2
+                + n * ||M_{m+1}||_2 * ||x||_2 ] * eps_M .
+
+    Our per-row column-checksum test ``sum_j C[i,j] == A[i,:].b_rowsum`` maps onto
+    this with the shared vector ``x = A[i,:]`` (length ``n = K``), the ``m = N``
+    "rows" ``M_j = B[:,j]`` (columns of B), and the checksum row
+    ``M_{N+1} = sum_j B[:,j] = b_rowsum``. Hence, per output row ``i``::
+
+        T[i] = [ (K + 2N - 2) * ||A[i,:]||_2 * (sum_j ||B[:,j]||_2)
+                 + K * ||b_rowsum||_2 * ||A[i,:]||_2 ] * eps_M ,
+
+    with ``eps_M = 2^-t = 2u`` the machine epsilon of ``a.dtype`` (fp32 ``2^-23``,
+    bf16 ``2^-7``, fp64 ``2^-52``).
+
+    Note:
+        SEA uses 2-norms (``||a||_2 ||b||_2 >= sum_k |a_k b_k|`` by Cauchy-Schwarz)
+        and ``eps_M = 2u``; it is therefore structurally >= ~4x looser than the
+        componentwise Higham bound above for the same operands. This is a
+        deliberate, documented modeling choice (the classical RCB SEA bound),
+        not a tightening of Higham.
+
+    Args:
+        a: Left operand, shape ``(M, K)``.
+        b: Right operand, shape ``(K, N)``.
+
+    Returns:
+        Per-row threshold tensor of shape ``(M,)`` (float64, on ``a.device``).
+    """
+    eps_m = _MACHINE_EPS[a.dtype]
+    a_f = a.to(torch.float64)
+    b_f = b.to(torch.float64)
+    k = a_f.shape[-1]
+    n = b_f.shape[-1]
+    a_row_norm = a_f.norm(dim=-1)                 # (M,)  ||A[i,:]||_2
+    b_col_norm_sum = b_f.norm(dim=0).sum()        # scalar  sum_j ||B[:,j]||_2
+    b_rowsum_norm = b_f.sum(dim=-1).norm()        # scalar  ||b_rowsum||_2
+    threshold = ((k + 2 * n - 2) * a_row_norm * b_col_norm_sum
+                 + k * b_rowsum_norm * a_row_norm) * eps_m
+    return threshold

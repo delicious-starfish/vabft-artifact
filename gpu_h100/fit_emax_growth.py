@@ -154,5 +154,5 @@ plt.legend()
 plt.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig('/Users/henrygao/Desktop/25fall/cuhk/10-29-/V-ABFT/emax_fit.png', dpi=150)
+plt.savefig('emax_fit.png', dpi=150)
 print(f"\n图表已保存到: emax_fit.png")

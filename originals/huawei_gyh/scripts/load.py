@@ -1,6 +1,8 @@
 import torch
 import torch_npu
 import os
+
+_FAULTY_ROOT = os.environ.get('LLM_DATA_ROOT_FAULTY', './checksum_llm_data_faulty')
 import glob
 import utils
 from datetime import datetime
@@ -124,9 +126,9 @@ def main():
     
     # 要检查的三个文件夹
     folders_to_check = [
-        "/home/gyh/checksum_llm_data1/mlp_r",
-        "/home/gyh/checksum_llm_data1/atte_c",
-        "/home/gyh/checksum_llm_data1/atte_r"
+        os.path.join(_FAULTY_ROOT, "mlp_r"),
+        os.path.join(_FAULTY_ROOT, "atte_c"),
+        os.path.join(_FAULTY_ROOT, "atte_r")
     ]
     
     # 检查每个文件夹

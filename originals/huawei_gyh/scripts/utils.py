@@ -205,8 +205,8 @@ def FT_matmul(a, b, FT_algorithm=my_bound_improve_robust):
                 else:
                     # print(i, j, k)
                     # save a_block and b_block for debugging
-                    # torch.save(a_block, "/home/gyh/data/a_block_error.pth")
-                    # torch.save(b_block, "/home/gyh/data/b_block_error.pth")
+                    # torch.save(a_block, "./data/a_block_error.pth")
+                    # torch.save(b_block, "./data/b_block_error.pth")
                     # raise ValueError("FT_matmul: Error bound exceeded during block multiplication.")
                     success = False
                     return success, c[:sizem, :sizen]
