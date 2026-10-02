@@ -1,0 +1,433 @@
+﻿k_value,init_method,init_params,data_type,bit_position,block_count,block_injected,block_detected,block_false,block_detection_rate,block_false_rate,row_count,row_injected,row_detected,row_false,row_detection_rate,row_false_rate,source_file
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,7,32388,10000,0,0,0.0,0.0,4145664,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,8,15924,10000,6909,0,69.09,0.0,2038272,10000,6909,0,69.09,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,9,15963,10000,10000,0,100.0,0.0,2043264,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,10,15821,10000,10000,0,100.0,0.0,2025088,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,11,15874,10000,10000,0,100.0,0.0,2031872,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,12,15804,10000,10000,0,100.0,0.0,2022912,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,13,15820,10000,10000,0,100.0,0.0,2024960,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,14,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,23,31907,10000,10000,0,100.0,0.0,4084096,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,24,15739,10000,10000,0,100.0,0.0,2014592,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,25,15959,10000,10000,0,100.0,0.0,2042752,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,26,15931,10000,10000,0,100.0,0.0,2039168,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,27,15816,10000,10000,0,100.0,0.0,2024448,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,28,15935,10000,10000,0,100.0,0.0,2039680,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,29,15996,10000,10000,0,100.0,0.0,2047488,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,30,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,7,33457,10000,0,0,0.0,0.0,4282496,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,8,15881,10000,6764,0,67.64,0.0,2032768,10000,6764,0,67.64,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,9,15844,10000,10000,0,100.0,0.0,2028032,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,10,15762,10000,10000,0,100.0,0.0,2017536,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,11,15877,10000,10000,0,100.0,0.0,2032256,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,12,15809,10000,10000,0,100.0,0.0,2023552,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,13,15752,10000,10000,0,100.0,0.0,2016256,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,14,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,23,31927,10000,10000,0,100.0,0.0,4086656,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,24,15644,10000,10000,0,100.0,0.0,2002432,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,25,15807,10000,10000,0,100.0,0.0,2023296,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,26,15935,10000,10000,0,100.0,0.0,2039680,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,27,16015,10000,10000,0,100.0,0.0,2049920,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,28,15957,10000,10000,0,100.0,0.0,2042496,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,29,16022,10000,10000,0,100.0,0.0,2050816,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,30,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,7,30933,10000,0,0,0.0,0.0,3959424,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,8,15840,10000,1758,0,17.58,0.0,2027520,10000,1758,0,17.58,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,9,15923,10000,7840,0,78.4,0.0,2038144,10000,7840,0,78.4,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,10,15803,10000,9883,0,98.83,0.0,2022784,10000,9883,0,98.83,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,11,15927,10000,10000,0,100.0,0.0,2038656,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,12,15997,10000,10000,0,100.0,0.0,2047616,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,13,15755,10000,10000,0,100.0,0.0,2016640,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,14,50000,1590,1590,0,100.0,0.0,6400000,1590,1597,0,100.4403,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,23,30614,10000,9993,0,99.93,0.0,3918592,10000,9993,0,99.93,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,24,15786,10000,9997,0,99.97,0.0,2020608,10000,9997,0,99.97,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,25,15952,10000,9998,0,99.98,0.0,2041856,10000,9998,0,99.98,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,26,15988,10000,10000,0,100.0,0.0,2046464,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,27,15868,10000,10000,0,100.0,0.0,2031104,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,28,15828,10000,10000,0,100.0,0.0,2025984,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,29,15815,10000,10000,0,100.0,0.0,2024320,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,30,50000,1541,1541,0,100.0,0.0,6400000,1541,1541,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,7,31076,10000,66,0,0.66,0.0,3977728,10000,66,0,0.66,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,8,15973,10000,5944,0,59.44,0.0,2044544,10000,5944,0,59.44,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,9,16089,10000,9132,0,91.32,0.0,2059392,10000,9132,0,91.32,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,10,16012,10000,9955,0,99.55,0.0,2049536,10000,9955,0,99.55,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,11,15974,10000,10000,0,100.0,0.0,2044672,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,12,15858,10000,10000,0,100.0,0.0,2029824,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,13,15934,10000,10000,0,100.0,0.0,2039552,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,14,50000,4652,4652,0,100.0,0.0,6400000,4652,4663,0,100.2365,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,23,31030,10000,9998,0,99.98,0.0,3971840,10000,9998,0,99.98,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,24,15795,10000,9998,0,99.98,0.0,2021760,10000,9998,0,99.98,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,25,15999,10000,10000,0,100.0,0.0,2047872,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,26,15825,10000,10000,0,100.0,0.0,2025600,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,27,16010,10000,10000,0,100.0,0.0,2049280,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,28,15861,10000,10000,0,100.0,0.0,2030208,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,29,15768,10000,10000,0,100.0,0.0,2018304,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+1024,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,30,50000,4682,4682,0,100.0,0.0,6400000,4682,4682,0,100.0,0.0,lowPre_offsetFI_specialLH_K1024.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,7,30797,10000,0,0,0.0,0.0,3942016,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,8,15741,10000,6818,0,68.18,0.0,2014848,10000,6818,0,68.18,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,9,15841,10000,10000,0,100.0,0.0,2027648,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,10,15794,10000,10000,0,100.0,0.0,2021632,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,11,15995,10000,10000,0,100.0,0.0,2047360,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,12,15827,10000,10000,0,100.0,0.0,2025856,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,13,15700,10000,10000,0,100.0,0.0,2009600,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,14,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,23,31733,10000,10000,0,100.0,0.0,4061824,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,24,15745,10000,10000,0,100.0,0.0,2015360,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,25,15763,10000,10000,0,100.0,0.0,2017664,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,26,15937,10000,10000,0,100.0,0.0,2039936,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,27,15893,10000,10000,0,100.0,0.0,2034304,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,28,15908,10000,10000,0,100.0,0.0,2036224,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,29,15723,10000,10000,0,100.0,0.0,2012544,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,30,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,7,29913,10000,0,0,0.0,0.0,3828864,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,8,15962,10000,6758,0,67.58,0.0,2043136,10000,6758,0,67.58,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,9,15955,10000,10000,0,100.0,0.0,2042240,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,10,15854,10000,10000,0,100.0,0.0,2029312,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,11,15957,10000,10000,0,100.0,0.0,2042496,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,12,15714,10000,10000,0,100.0,0.0,2011392,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,13,15880,10000,10000,0,100.0,0.0,2032640,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,14,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,23,31999,10000,10000,0,100.0,0.0,4095872,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,24,15904,10000,10000,0,100.0,0.0,2035712,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,25,15769,10000,10000,0,100.0,0.0,2018432,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,26,15964,10000,10000,0,100.0,0.0,2043392,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,27,15904,10000,10000,0,100.0,0.0,2035712,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,28,15881,10000,10000,0,100.0,0.0,2032768,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,29,15918,10000,10000,0,100.0,0.0,2037504,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,30,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,7,30936,10000,0,0,0.0,0.0,3959808,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,8,15796,10000,1495,0,14.95,0.0,2021888,10000,1495,0,14.95,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,9,15708,10000,7729,0,77.29,0.0,2010624,10000,7729,0,77.29,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,10,15948,10000,9871,0,98.71,0.0,2041344,10000,9871,0,98.71,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,11,15949,10000,10000,0,100.0,0.0,2041472,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,12,15996,10000,10000,0,100.0,0.0,2047488,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,13,16019,10000,10000,0,100.0,0.0,2050432,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,14,50000,1111,1111,0,100.0,0.0,6400000,1111,1119,0,100.7201,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,23,30830,10000,9986,0,99.86,0.0,3946240,10000,9986,0,99.86,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,24,15928,10000,9990,0,99.9,0.0,2038784,10000,9990,0,99.9,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,25,15906,10000,9999,0,99.99,0.0,2035968,10000,9999,0,99.99,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,26,15996,10000,10000,0,100.0,0.0,2047488,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,27,15800,10000,10000,0,100.0,0.0,2022400,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,28,15964,10000,10000,0,100.0,0.0,2043392,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,29,15827,10000,10000,0,100.0,0.0,2025856,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,30,50000,1097,1097,0,100.0,0.0,6400000,1097,1097,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,7,33367,10000,730,0,7.3,0.0,4270976,10000,730,0,7.3,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,8,15843,10000,5933,0,59.33,0.0,2027904,10000,5933,0,59.33,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,9,15827,10000,9144,0,91.44,0.0,2025856,10000,9144,0,91.44,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,10,15855,10000,9936,0,99.36,0.0,2029440,10000,9936,0,99.36,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,11,15819,10000,9999,0,99.99,0.0,2024832,10000,9999,0,99.99,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,12,15860,10000,10000,0,100.0,0.0,2030080,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,13,15923,10000,10000,0,100.0,0.0,2038144,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,14,50000,3239,3238,0,99.9691,0.0,6400000,3239,3242,0,100.0926,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,23,33086,10000,9995,0,99.95,0.0,4235008,10000,9995,0,99.95,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,24,15811,10000,9999,0,99.99,0.0,2023808,10000,9999,0,99.99,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,25,15872,10000,10000,0,100.0,0.0,2031616,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,26,15690,10000,10000,0,100.0,0.0,2008320,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,27,15826,10000,10000,0,100.0,0.0,2025728,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,28,16171,10000,10000,0,100.0,0.0,2069888,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,29,15884,10000,10000,0,100.0,0.0,2033152,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+2048,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,30,50000,3311,3311,0,100.0,0.0,6400000,3311,3311,0,100.0,0.0,lowPre_offsetFI_specialLH_K2048.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,7,15781,10000,0,0,0.0,0.0,2019968,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,8,15810,10000,10000,0,100.0,0.0,2023680,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,9,15746,10000,10000,0,100.0,0.0,2015488,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,10,15857,10000,10000,0,100.0,0.0,2029696,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,11,15964,10000,10000,0,100.0,0.0,2043392,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,12,15895,10000,10000,0,100.0,0.0,2034560,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,13,15842,10000,10000,0,100.0,0.0,2027776,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,14,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,23,15753,10000,10000,0,100.0,0.0,2016384,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,24,15843,10000,10000,0,100.0,0.0,2027904,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,25,16046,10000,10000,0,100.0,0.0,2053888,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,26,15993,10000,10000,0,100.0,0.0,2047104,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,27,15995,10000,10000,0,100.0,0.0,2047360,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,28,15979,10000,10000,0,100.0,0.0,2045312,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,29,15831,10000,10000,0,100.0,0.0,2026368,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,30,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,7,15958,10000,0,0,0.0,0.0,2042624,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,8,15859,10000,10000,0,100.0,0.0,2029952,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,9,15772,10000,10000,0,100.0,0.0,2018816,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,10,15827,10000,10000,0,100.0,0.0,2025856,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,11,15805,10000,10000,0,100.0,0.0,2023040,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,12,15894,10000,10000,0,100.0,0.0,2034432,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,13,15874,10000,10000,0,100.0,0.0,2031872,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,14,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,23,15771,10000,10000,0,100.0,0.0,2018688,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,24,15805,10000,10000,0,100.0,0.0,2023040,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,25,15858,10000,10000,0,100.0,0.0,2029824,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,26,15996,10000,10000,0,100.0,0.0,2047488,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,27,15914,10000,10000,0,100.0,0.0,2036992,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,28,15826,10000,10000,0,100.0,0.0,2025728,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,29,15645,10000,10000,0,100.0,0.0,2002560,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,30,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,7,32803,10000,0,0,0.0,0.0,4198784,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,8,15896,10000,1431,0,14.31,0.0,2034688,10000,1431,0,14.31,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,9,15977,10000,7700,0,77.0,0.0,2045056,10000,7700,0,77.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,10,15868,10000,9851,0,98.51,0.0,2031104,10000,9851,0,98.51,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,11,15796,10000,9997,0,99.97,0.0,2021888,10000,9997,0,99.97,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,12,15749,10000,10000,0,100.0,0.0,2015872,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,13,16089,10000,10000,0,100.0,0.0,2059392,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,14,50000,948,948,0,100.0,0.0,6400000,948,950,0,100.211,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,23,32414,10000,9990,0,99.9,0.0,4148992,10000,9990,0,99.9,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,24,15861,10000,9999,0,99.99,0.0,2030208,10000,9999,0,99.99,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,25,15968,10000,10000,0,100.0,0.0,2043904,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,26,15902,10000,10000,0,100.0,0.0,2035456,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,27,15903,10000,10000,0,100.0,0.0,2035584,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,28,15887,10000,10000,0,100.0,0.0,2033536,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,29,15899,10000,10000,0,100.0,0.0,2035072,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,30,50000,911,911,0,100.0,0.0,6400000,911,911,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,7,33273,10000,1699,0,16.99,0.0,4258944,10000,1699,0,16.99,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,8,15837,10000,5954,0,59.54,0.0,2027136,10000,5954,0,59.54,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,9,15848,10000,9148,0,91.48,0.0,2028544,10000,9148,0,91.48,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,10,15904,10000,9948,0,99.48,0.0,2035712,10000,9948,0,99.48,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,11,15860,10000,10000,0,100.0,0.0,2030080,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,12,15869,10000,10000,0,100.0,0.0,2031232,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,13,15723,10000,10000,0,100.0,0.0,2012544,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,14,50000,2624,2624,0,100.0,0.0,6400000,2624,2628,0,100.1524,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,23,33356,10000,9992,0,99.92,0.0,4269568,10000,9992,0,99.92,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,24,15922,10000,9994,0,99.94,0.0,2038016,10000,9994,0,99.94,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,25,15768,10000,9999,0,99.99,0.0,2018304,10000,9999,0,99.99,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,26,15864,10000,10000,0,100.0,0.0,2030592,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,27,15797,10000,10000,0,100.0,0.0,2022016,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,28,15738,10000,10000,0,100.0,0.0,2014464,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,29,15878,10000,10000,0,100.0,0.0,2032384,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+3072,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,30,50000,2760,2760,0,100.0,0.0,6400000,2760,2760,0,100.0,0.0,lowPre_offsetFI_specialLH_K3072.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,7,33062,10000,0,0,0.0,0.0,4231936,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,8,15876,10000,6670,0,66.7,0.0,2032128,10000,6670,0,66.7,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,9,16041,10000,10000,0,100.0,0.0,2053248,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,10,15723,10000,10000,0,100.0,0.0,2012544,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,11,15878,10000,10000,0,100.0,0.0,2032384,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,12,15968,10000,10000,0,100.0,0.0,2043904,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,13,15841,10000,10000,0,100.0,0.0,2027648,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,14,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,23,31695,10000,10000,0,100.0,0.0,4056960,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,24,15916,10000,10000,0,100.0,0.0,2037248,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,25,15748,10000,10000,0,100.0,0.0,2015744,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,26,16025,10000,10000,0,100.0,0.0,2051200,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,27,15891,10000,10000,0,100.0,0.0,2034048,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,28,15980,10000,10000,0,100.0,0.0,2045440,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,29,15976,10000,10000,0,100.0,0.0,2044928,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,30,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,7,34509,10000,0,0,0.0,0.0,4417152,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,8,16005,10000,6598,0,65.98,0.0,2048640,10000,6598,0,65.98,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,9,15870,10000,10000,0,100.0,0.0,2031360,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,10,15910,10000,10000,0,100.0,0.0,2036480,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,11,16002,10000,10000,0,100.0,0.0,2048256,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,12,15922,10000,10000,0,100.0,0.0,2038016,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,13,15722,10000,10000,0,100.0,0.0,2012416,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,14,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,23,31828,10000,10000,0,100.0,0.0,4073984,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,24,15797,10000,10000,0,100.0,0.0,2022016,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,25,15849,10000,10000,0,100.0,0.0,2028672,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,26,15972,10000,10000,0,100.0,0.0,2044416,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,27,15727,10000,10000,0,100.0,0.0,2013056,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,28,15938,10000,10000,0,100.0,0.0,2040064,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,29,15795,10000,10000,0,100.0,0.0,2021760,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,30,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,7,32573,10000,0,0,0.0,0.0,4169344,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,8,15855,10000,1357,0,13.57,0.0,2029440,10000,1357,0,13.57,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,9,15928,10000,7634,0,76.34,0.0,2038784,10000,7634,0,76.34,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,10,15856,10000,9861,0,98.61,0.0,2029568,10000,9861,0,98.61,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,11,15810,10000,9998,0,99.98,0.0,2023680,10000,9998,0,99.98,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,12,15717,10000,10000,0,100.0,0.0,2011776,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,13,16051,10000,10000,0,100.0,0.0,2054528,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,14,50000,754,754,0,100.0,0.0,6400000,754,755,0,100.1326,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,23,32928,10000,9983,0,99.83,0.0,4214784,10000,9983,0,99.83,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,24,15913,10000,9995,0,99.95,0.0,2036864,10000,9995,0,99.95,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,25,15814,10000,9998,0,99.98,0.0,2024192,10000,9998,0,99.98,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,26,15910,10000,10000,0,100.0,0.0,2036480,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,27,15863,10000,10000,0,100.0,0.0,2030464,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,28,15795,10000,10000,0,100.0,0.0,2021760,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,29,15981,10000,10000,0,100.0,0.0,2045568,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,30,50000,793,793,0,100.0,0.0,6400000,793,793,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,7,32934,10000,2102,0,21.02,0.0,4215552,10000,2102,0,21.02,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,8,15783,10000,6006,0,60.06,0.0,2020224,10000,6006,0,60.06,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,9,15694,10000,9143,0,91.43,0.0,2008832,10000,9143,0,91.43,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,10,15798,10000,9945,0,99.45,0.0,2022144,10000,9945,0,99.45,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,11,15925,10000,10000,0,100.0,0.0,2038400,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,12,15758,10000,10000,0,100.0,0.0,2017024,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,13,15856,10000,10000,0,100.0,0.0,2029568,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,14,50000,2406,2405,0,99.9584,0.0,6400000,2406,2410,0,100.1663,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,23,33134,10000,9996,0,99.96,0.0,4241152,10000,9996,0,99.96,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,24,15950,10000,9998,0,99.98,0.0,2041600,10000,9998,0,99.98,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,25,15792,10000,9999,0,99.99,0.0,2021376,10000,9999,0,99.99,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,26,15929,10000,10000,0,100.0,0.0,2038912,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,27,15719,10000,10000,0,100.0,0.0,2012032,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,28,15750,10000,10000,0,100.0,0.0,2016000,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,29,15914,10000,10000,0,100.0,0.0,2036992,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+4096,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,30,50000,2454,2454,0,100.0,0.0,6400000,2454,2454,0,100.0,0.0,lowPre_offsetFI_specialLH_K4096.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,7,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,8,15986,10000,10000,0,100.0,0.0,2046208,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,9,15832,10000,10000,0,100.0,0.0,2026496,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,10,15806,10000,10000,0,100.0,0.0,2023168,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,11,15634,10000,10000,0,100.0,0.0,2001152,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,12,15784,10000,10000,0,100.0,0.0,2020352,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,13,15779,10000,10000,0,100.0,0.0,2019712,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,14,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,23,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,24,15965,10000,10000,0,100.0,0.0,2043520,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,25,16040,10000,10000,0,100.0,0.0,2053120,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,26,15791,10000,10000,0,100.0,0.0,2021248,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,27,15764,10000,10000,0,100.0,0.0,2017792,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,28,15986,10000,10000,0,100.0,0.0,2046208,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,29,15989,10000,10000,0,100.0,0.0,2046592,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,30,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,7,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,8,15881,10000,10000,0,100.0,0.0,2032768,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,9,15889,10000,10000,0,100.0,0.0,2033792,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,10,15831,10000,10000,0,100.0,0.0,2026368,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,11,15767,10000,10000,0,100.0,0.0,2018176,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,12,15995,10000,10000,0,100.0,0.0,2047360,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,13,16030,10000,10000,0,100.0,0.0,2051840,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,14,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,23,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,24,15737,10000,10000,0,100.0,0.0,2014336,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,25,15856,10000,10000,0,100.0,0.0,2029568,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,26,15903,10000,10000,0,100.0,0.0,2035584,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,27,15979,10000,10000,0,100.0,0.0,2045312,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,28,15900,10000,10000,0,100.0,0.0,2035200,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,29,15787,10000,10000,0,100.0,0.0,2020736,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,30,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,7,33264,10000,0,0,0.0,0.0,4257792,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,8,15851,10000,1243,0,12.43,0.0,2028928,10000,1243,0,12.43,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,9,15877,10000,7627,0,76.27,0.0,2032256,10000,7627,0,76.27,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,10,16042,10000,9859,0,98.59,0.0,2053376,10000,9859,0,98.59,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,11,15883,10000,10000,0,100.0,0.0,2033024,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,12,15746,10000,10000,0,100.0,0.0,2015488,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,13,15857,10000,10000,0,100.0,0.0,2029696,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,14,50000,665,665,0,100.0,0.0,6400000,665,667,0,100.3008,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,23,33326,10000,9978,0,99.78,0.0,4265728,10000,9978,0,99.78,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,24,15956,10000,9994,0,99.94,0.0,2042368,10000,9994,0,99.94,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,25,15803,10000,9999,0,99.99,0.0,2022784,10000,9999,0,99.99,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,26,16012,10000,10000,0,100.0,0.0,2049536,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,27,15891,10000,10000,0,100.0,0.0,2034048,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,28,15875,10000,10000,0,100.0,0.0,2032000,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,29,16131,10000,10000,0,100.0,0.0,2064768,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,30,50000,599,599,0,100.0,0.0,6400000,599,599,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,7,31023,10000,1734,0,17.34,0.0,3970944,10000,1734,0,17.34,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,8,15923,10000,5708,0,57.08,0.0,2038144,10000,5708,0,57.08,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,9,15816,10000,9118,0,91.18,0.0,2024448,10000,9118,0,91.18,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,10,15806,10000,9941,0,99.41,0.0,2023168,10000,9941,0,99.41,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,11,15875,10000,10000,0,100.0,0.0,2032000,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,12,15877,10000,10000,0,100.0,0.0,2032256,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,13,15999,10000,10000,0,100.0,0.0,2047872,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,14,50000,1940,1939,0,99.9485,0.0,6400000,1940,1942,0,100.1031,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,23,31295,10000,9995,0,99.95,0.0,4005760,10000,9995,0,99.95,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,24,15908,10000,9998,0,99.98,0.0,2036224,10000,9998,0,99.98,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,25,16037,10000,9999,0,99.99,0.0,2052736,10000,9999,0,99.99,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,26,15889,10000,10000,0,100.0,0.0,2033792,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,27,15724,10000,10000,0,100.0,0.0,2012672,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,28,15905,10000,10000,0,100.0,0.0,2035840,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,29,15721,10000,10000,0,100.0,0.0,2012288,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+6144,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,30,50000,1912,1912,0,100.0,0.0,6400000,1912,1912,0,100.0,0.0,lowPre_offsetFI_specialLH_K6144.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,7,29526,10000,0,0,0.0,0.0,3779328,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,8,15878,10000,6522,0,65.22,0.0,2032384,10000,6522,0,65.22,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,9,15764,10000,10000,0,100.0,0.0,2017792,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,10,15812,10000,10000,0,100.0,0.0,2023936,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,11,15809,10000,10000,0,100.0,0.0,2023552,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,12,15790,10000,10000,0,100.0,0.0,2021120,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,13,15820,10000,10000,0,100.0,0.0,2024960,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.bfloat16,14,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,23,31346,10000,10000,0,100.0,0.0,4012288,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,24,15618,10000,10000,0,100.0,0.0,1999104,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,25,15910,10000,10000,0,100.0,0.0,2036480,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,26,15873,10000,10000,0,100.0,0.0,2031744,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,27,15767,10000,10000,0,100.0,0.0,2018176,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,28,15905,10000,10000,0,100.0,0.0,2035840,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,29,15786,10000,10000,0,100.0,0.0,2020608,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_normal,"{'std': 1, 'mean': 1}",torch.float32,30,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,7,28059,10000,0,0,0.0,0.0,3591552,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,8,15723,10000,6461,0,64.61,0.0,2012544,10000,6461,0,64.61,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,9,15917,10000,10000,0,100.0,0.0,2037376,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,10,15880,10000,10000,0,100.0,0.0,2032640,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,11,15924,10000,10000,0,100.0,0.0,2038272,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,12,16001,10000,10000,0,100.0,0.0,2048128,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,13,15871,10000,10000,0,100.0,0.0,2031488,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.bfloat16,14,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,23,31818,10000,10000,0,100.0,0.0,4072704,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,24,15823,10000,10000,0,100.0,0.0,2025344,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,25,16026,10000,10000,0,100.0,0.0,2051328,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,26,15888,10000,10000,0,100.0,0.0,2033664,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,27,15801,10000,10000,0,100.0,0.0,2022528,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,28,15974,10000,10000,0,100.0,0.0,2044672,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,29,15901,10000,10000,0,100.0,0.0,2035328,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_clamp,"{'std': 1, 'mean': 1}",torch.float32,30,50000,0,0,0,,,6400000,0,0,0,,,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,7,32187,10000,0,0,0.0,0.0,4119936,10000,0,0,0.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,8,15811,10000,1137,0,11.37,0.0,2023808,10000,1137,0,11.37,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,9,15856,10000,7489,0,74.89,0.0,2029568,10000,7489,0,74.89,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,10,15727,10000,9844,0,98.44,0.0,2013056,10000,9844,0,98.44,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,11,15955,10000,10000,0,100.0,0.0,2042240,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,12,15836,10000,10000,0,100.0,0.0,2027008,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,13,15933,10000,10000,0,100.0,0.0,2039424,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.bfloat16,14,50000,541,541,0,100.0,0.0,6400000,541,542,0,100.1848,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,23,32664,10000,9958,0,99.58,0.0,4180992,10000,9958,0,99.58,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,24,15914,10000,9990,0,99.9,0.0,2036992,10000,9990,0,99.9,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,25,15668,10000,9999,0,99.99,0.0,2005504,10000,9999,0,99.99,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,26,15923,10000,10000,0,100.0,0.0,2038144,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,27,15710,10000,10000,0,100.0,0.0,2010880,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,28,15888,10000,10000,0,100.0,0.0,2033664,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,29,15829,10000,10000,0,100.0,0.0,2026112,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice,"{'std': 1, 'mean': 1e-06}",torch.float32,30,50000,545,545,0,100.0,0.0,6400000,545,545,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,7,30354,10000,1314,0,13.14,0.0,3885312,10000,1314,0,13.14,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,8,15862,10000,5864,0,58.64,0.0,2030336,10000,5864,0,58.64,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,9,15995,10000,9130,0,91.3,0.0,2047360,10000,9130,0,91.3,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,10,15729,10000,9966,0,99.66,0.0,2013312,10000,9966,0,99.66,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,11,15797,10000,10000,0,100.0,0.0,2022016,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,12,15974,10000,10000,0,100.0,0.0,2044672,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,13,15766,10000,10000,0,100.0,0.0,2018048,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.bfloat16,14,50000,1652,1652,0,100.0,0.0,6400000,1652,1655,0,100.1816,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,23,30296,10000,9998,0,99.98,0.0,3877888,10000,9998,0,99.98,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,24,15859,10000,9997,0,99.97,0.0,2029952,10000,9997,0,99.97,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,25,15831,10000,10000,0,100.0,0.0,2026368,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,26,15805,10000,10000,0,100.0,0.0,2023040,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,27,15810,10000,10000,0,100.0,0.0,2023680,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,28,15944,10000,10000,0,100.0,0.0,2040832,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,29,15889,10000,10000,0,100.0,0.0,2033792,10000,10000,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+8192,generate_matrice_uniform,"{'lower': -1, 'upper': 1}",torch.float32,30,50000,1686,1686,0,100.0,0.0,6400000,1686,1686,0,100.0,0.0,lowPre_offsetFI_specialLH_K8192.txt
+1024,generate_matrice_normal,,torch.bfloat16,ALL,177594,70000,56909,0,81.29857142857144,0.0,22732032,70000,56909,0,81.29857142857144,0.0,SUMMARY
+1024,generate_matrice_normal,,torch.float32,ALL,177283,70000,70000,0,100.0,0.0,22692224,70000,70000,0,100.0,0.0,SUMMARY
+1024,generate_matrice_clamp,,torch.bfloat16,ALL,178382,70000,56764,0,81.09142857142857,0.0,22832896,70000,56764,0,81.09142857142857,0.0,SUMMARY
+1024,generate_matrice_clamp,,torch.float32,ALL,177307,70000,70000,0,100.0,0.0,22695296,70000,70000,0,100.0,0.0,SUMMARY
+1024,generate_matrice,,torch.bfloat16,ALL,176178,71590,51071,0,74.35125,0.0,22550784,71590,51078,0,74.4062875,0.0,SUMMARY
+1024,generate_matrice,,torch.float32,ALL,175851,71541,71529,0,99.985,0.0,22508928,71541,71529,0,99.985,0.0,SUMMARY
+1024,generate_matrice_uniform,,torch.bfloat16,ALL,176916,74652,59749,0,81.37125,0.0,22645248,74652,59760,0,81.4008125,0.0,SUMMARY
+1024,generate_matrice_uniform,,torch.float32,ALL,176288,74682,74678,0,99.995,0.0,22564864,74682,74678,0,99.995,0.0,SUMMARY
+2048,generate_matrice_normal,,torch.bfloat16,ALL,175695,70000,56818,0,81.16857142857144,0.0,22488960,70000,56818,0,81.16857142857144,0.0,SUMMARY
+2048,generate_matrice_normal,,torch.float32,ALL,176702,70000,70000,0,100.0,0.0,22617856,70000,70000,0,100.0,0.0,SUMMARY
+2048,generate_matrice_clamp,,torch.bfloat16,ALL,175235,70000,56758,0,81.08285714285715,0.0,22430080,70000,56758,0,81.08285714285715,0.0,SUMMARY
+2048,generate_matrice_clamp,,torch.float32,ALL,177339,70000,70000,0,100.0,0.0,22699392,70000,70000,0,100.0,0.0,SUMMARY
+2048,generate_matrice,,torch.bfloat16,ALL,176352,71111,50206,0,73.86875,0.0,22573056,71111,50214,0,73.9587625,0.0,SUMMARY
+2048,generate_matrice,,torch.float32,ALL,176251,71097,71072,0,99.96875,0.0,22560128,71097,71072,0,99.96875,0.0,SUMMARY
+2048,generate_matrice_uniform,,torch.bfloat16,ALL,178494,73239,58980,0,82.1736375,0.0,22847232,73239,58984,0,82.189075,0.0,SUMMARY
+2048,generate_matrice_uniform,,torch.float32,ALL,178340,73311,73305,0,99.9925,0.0,22827520,73311,73305,0,99.9925,0.0,SUMMARY
+3072,generate_matrice_normal,,torch.bfloat16,ALL,160895,70000,60000,0,85.71428571428571,0.0,20594560,70000,60000,0,85.71428571428571,0.0,SUMMARY
+3072,generate_matrice_normal,,torch.float32,ALL,161440,70000,70000,0,100.0,0.0,20664320,70000,70000,0,100.0,0.0,SUMMARY
+3072,generate_matrice_clamp,,torch.bfloat16,ALL,160989,70000,60000,0,85.71428571428571,0.0,20606592,70000,60000,0,85.71428571428571,0.0,SUMMARY
+3072,generate_matrice_clamp,,torch.float32,ALL,160815,70000,70000,0,100.0,0.0,20584320,70000,70000,0,100.0,0.0,SUMMARY
+3072,generate_matrice,,torch.bfloat16,ALL,178178,70948,49927,0,73.72375,0.0,22806784,70948,49929,0,73.750125,0.0,SUMMARY
+3072,generate_matrice,,torch.float32,ALL,177834,70911,70900,0,99.98625,0.0,22762752,70911,70900,0,99.98625,0.0,SUMMARY
+3072,generate_matrice_uniform,,torch.bfloat16,ALL,178314,72624,59373,0,83.43625,0.0,22824192,72624,59377,0,83.4553,0.0,SUMMARY
+3072,generate_matrice_uniform,,torch.float32,ALL,178323,72760,72745,0,99.98125,0.0,22825344,72760,72745,0,99.98125,0.0,SUMMARY
+4096,generate_matrice_normal,,torch.bfloat16,ALL,178389,70000,56670,0,80.95714285714287,0.0,22833792,70000,56670,0,80.95714285714287,0.0,SUMMARY
+4096,generate_matrice_normal,,torch.float32,ALL,177231,70000,70000,0,100.0,0.0,22685568,70000,70000,0,100.0,0.0,SUMMARY
+4096,generate_matrice_clamp,,torch.bfloat16,ALL,179940,70000,56598,0,80.85428571428572,0.0,23032320,70000,56598,0,80.85428571428572,0.0,SUMMARY
+4096,generate_matrice_clamp,,torch.float32,ALL,176906,70000,70000,0,100.0,0.0,22643968,70000,70000,0,100.0,0.0,SUMMARY
+4096,generate_matrice,,torch.bfloat16,ALL,177790,70754,49604,0,73.5625,0.0,22757120,70754,49605,0,73.579075,0.0,SUMMARY
+4096,generate_matrice,,torch.float32,ALL,178204,70793,70769,0,99.97,0.0,22810112,70793,70769,0,99.97,0.0,SUMMARY
+4096,generate_matrice_uniform,,torch.bfloat16,ALL,177748,72406,59601,0,83.9898,0.0,22751744,72406,59606,0,84.0157875,0.0,SUMMARY
+4096,generate_matrice_uniform,,torch.float32,ALL,178188,72454,72447,0,99.99125,0.0,22808064,72454,72447,0,99.99125,0.0,SUMMARY
+6144,generate_matrice_normal,,torch.bfloat16,ALL,194821,60000,60000,0,100.0,0.0,24937088,60000,60000,0,100.0,0.0,SUMMARY
+6144,generate_matrice_normal,,torch.float32,ALL,195535,60000,60000,0,100.0,0.0,25028480,60000,60000,0,100.0,0.0,SUMMARY
+6144,generate_matrice_clamp,,torch.bfloat16,ALL,195393,60000,60000,0,100.0,0.0,25010304,60000,60000,0,100.0,0.0,SUMMARY
+6144,generate_matrice_clamp,,torch.float32,ALL,195162,60000,60000,0,100.0,0.0,24980736,60000,60000,0,100.0,0.0,SUMMARY
+6144,generate_matrice,,torch.bfloat16,ALL,178520,70665,49394,0,73.41125,0.0,22850560,70665,49396,0,73.44885,0.0,SUMMARY
+6144,generate_matrice,,torch.float32,ALL,178994,70599,70570,0,99.96375,0.0,22911232,70599,70570,0,99.96375,0.0,SUMMARY
+6144,generate_matrice_uniform,,torch.bfloat16,ALL,176319,71940,58440,0,83.1198125,0.0,22568832,71940,58443,0,83.1391375,0.0,SUMMARY
+6144,generate_matrice_uniform,,torch.float32,ALL,176479,71912,71904,0,99.99,0.0,22589312,71912,71904,0,99.99,0.0,SUMMARY
+8192,generate_matrice_normal,,torch.bfloat16,ALL,174399,70000,56522,0,80.74571428571429,0.0,22323072,70000,56522,0,80.74571428571429,0.0,SUMMARY
+8192,generate_matrice_normal,,torch.float32,ALL,176205,70000,70000,0,100.0,0.0,22554240,70000,70000,0,100.0,0.0,SUMMARY
+8192,generate_matrice_clamp,,torch.bfloat16,ALL,173375,70000,56461,0,80.65857142857143,0.0,22192000,70000,56461,0,80.65857142857143,0.0,SUMMARY
+8192,generate_matrice_clamp,,torch.float32,ALL,177231,70000,70000,0,100.0,0.0,22685568,70000,70000,0,100.0,0.0,SUMMARY
+8192,generate_matrice,,torch.bfloat16,ALL,177305,70541,49011,0,73.0875,0.0,22695040,70541,49012,0,73.1106,0.0,SUMMARY
+8192,generate_matrice,,torch.float32,ALL,177596,70545,70492,0,99.93375,0.0,22732288,70545,70492,0,99.93375,0.0,SUMMARY
+8192,generate_matrice_uniform,,torch.bfloat16,ALL,175477,71652,57926,0,82.8425,0.0,22461056,71652,57929,0,82.8652,0.0,SUMMARY
+8192,generate_matrice_uniform,,torch.float32,ALL,175434,71686,71681,0,99.99375,0.0,22455552,71686,71681,0,99.99375,0.0,SUMMARY
