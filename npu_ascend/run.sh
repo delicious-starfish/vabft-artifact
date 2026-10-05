@@ -71,7 +71,7 @@ send_completion_email() {
 trap send_completion_email EXIT
 
 experiment_cmd=(
-    python "${SCRIPT_DIR}/vabft_acc_hiPre.py"
+    python "${SCRIPT_DIR}/vabft_full_hiPre.py"
     --m 1024
     --n 1024
     --k-values 1024,2048,3072,4096,6144,8192
