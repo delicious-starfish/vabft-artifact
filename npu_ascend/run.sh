@@ -41,6 +41,34 @@ REPORT_MD="${OUTPUT_DIR}/report.md"
 RUN_LOG="${OUTPUT_DIR}/run.log"
 PARSE_LOG="${OUTPUT_DIR}/parse.log"
 AUDIT_JSONL="${OUTPUT_DIR}/audit.jsonl"
+EMAIL_NOTIFIER="${REPO_ROOT}/tools/send_hardcoded_email.py"
+
+send_completion_email() {
+    local exit_code=$?
+    local outcome="completed successfully"
+    if (( exit_code != 0 )); then
+        outcome="failed"
+    fi
+
+    local subject="V-ABFT pipeline ${outcome}"
+    local body
+    body=$(printf '%s\n' \
+        "The V-ABFT pipeline ${outcome}." \
+        "Exit code: ${exit_code}" \
+        "Output directory: ${OUTPUT_DIR}" \
+        "Device: ${DEVICE}" \
+        "Run log: ${RUN_LOG}" \
+        "Parse log: ${PARSE_LOG}")
+
+    # Keep the pipeline's original exit status even if SMTP delivery fails.
+    if ! python "${EMAIL_NOTIFIER}" --subject "${subject}" --body "${body}"; then
+        echo "Warning: completion email could not be sent." >&2
+    fi
+    return "${exit_code}"
+}
+
+# Notify for both successful completion and an interrupted/failed pipeline.
+trap send_completion_email EXIT
 
 experiment_cmd=(
     python "${SCRIPT_DIR}/vabft_acc_hiPre.py"
