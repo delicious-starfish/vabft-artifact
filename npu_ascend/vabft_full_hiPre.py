@@ -308,6 +308,7 @@ def run_condition(
     # realised count random, so use the deterministic upper bound here.
     max_injection_attempts = 20 * trials * blocks_per_trial
     injection_attempts = 0
+    injection_unavailable = False
 
     def refresh_matrices() -> None:
         """Create a new consistent A/B/C set and reset per-block reservations."""
@@ -371,6 +372,7 @@ def run_condition(
             faults: dict[int, InjectedFault] = {}
             block_id = 0
             retry_with_new_matrices = False
+            attempts_exhausted = False
 
             for col_start in range(0, n, block_n):
                 col_end = min(col_start + block_n, n)
@@ -383,12 +385,8 @@ def run_condition(
                         fault: InjectedFault | None = None
                         for _attempt in range(20):
                             if injection_attempts >= max_injection_attempts:
-                                raise RuntimeError(
-                                    "maximum injection candidate attempts exceeded "
-                                    f"({max_injection_attempts} = 20 * {trials} "
-                                    f"trials * {blocks_per_trial} blocks); "
-                                    "could not complete 0->1 injection"
-                                )
+                                attempts_exhausted = True
+                                break
                             injection_attempts += 1
                             global_row, global_col = draw_unused_position(
                                 rng,
@@ -435,6 +433,8 @@ def run_condition(
                             )
                             break
 
+                        if attempts_exhausted:
+                            break
                         if fault is None:
                             retry_with_new_matrices = True
                             break
@@ -442,7 +442,13 @@ def run_condition(
                     block_id += 1
                 if retry_with_new_matrices:
                     break
+                if attempts_exhausted:
+                    break
 
+            if attempts_exhausted:
+                injection_unavailable = True
+                del c_faulty, c_faulty_fp32
+                break
             if not retry_with_new_matrices:
                 counters.total_blocks += block_id
                 counters.all_injected += len(faults)
@@ -456,6 +462,9 @@ def run_condition(
                 and b_fp32 is not None
                 and c_fp32 is not None
             )
+
+        if injection_unavailable:
+            break
 
         # Everything below is deliberately computed after C_faulty has been
         # modified.  No clean-D1-plus-delta shortcut is used.
@@ -472,10 +481,10 @@ def run_condition(
 
             # Threshold is recalculated only after fault injection, as is D1/D2.
             threshold_all = utils.my_bound_improve_robust(
-                a_fp32, b_slice_fp32, dtype=dtype
+                a_fp32, b_slice_fp32, dtype=torch.float32
             ).float()
-            abe = (a_fp32 @ b_fp32.sum(dim=1, keepdim=True)).squeeze(1)
-            abw = (a_fp32 @ (b_fp32 @ weights.unsqueeze(1))).squeeze(1)
+            abe = (a_fp32 @ b_slice_fp32.sum(dim=1, keepdim=True)).squeeze(1)
+            abw = (a_fp32 @ (b_slice_fp32 @ weights.unsqueeze(1))).squeeze(1)
             d1_all = abe - c_slice_fp32.sum(dim=1)
             d2_all = abw - c_slice_fp32 @ weights
 
@@ -676,6 +685,27 @@ def run_condition(
         }
     )
 
+    if injection_unavailable:
+        # The condition could not produce a valid 0->1 injection within the
+        # bounded retry budget.  Keep the row in the summary, but distinguish
+        # unavailable detection/localization rates from genuine zero rates.
+        unavailable_metrics = (
+            "non_nan_row_DR",
+            "non_nan_block_DR",
+            "non_nan_localization_R",
+            "non_nan_conditional_localization_R",
+            "nan_row_DR",
+            "nan_block_DR",
+            "nan_localization_R",
+            "nan_conditional_localization_R",
+            "row_DR",
+            "block_DR",
+            "localization_R",
+            "conditional_localization_R",
+        )
+        for metric in unavailable_metrics:
+            result[metric] = -1
+
     del c, b, a, c_fp32, b_fp32, a_fp32
     torch_npu.npu.synchronize()
     return result
@@ -852,8 +882,9 @@ def main() -> int:
         device_names = args.devices
     elif args.device != "npu:-1":
         # Preserve the legacy single-device behaviour when a non-default
-        # --device is explicitly selected.
-        device_names = [args.device]
+        # --device is explicitly selected.  Also accept a comma-separated
+        # DEVICE environment variable for compatibility with run.sh.
+        device_names = parse_devices(args.device)
     else:
         try:
             detected_count = int(torch_npu.npu.device_count())
