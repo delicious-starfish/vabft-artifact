@@ -12,6 +12,7 @@ dist/
 *.egg-info/
 .pytest_cache/
 result/*
+tools
 # Skip large reproduction trace dumps (rebuild on demand)
 *.npy
 *.npz
