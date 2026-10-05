@@ -14,6 +14,7 @@ This is the unified successor to ``vabft_acc.py``:
 * detection is evaluated per 128x256 output block;
 * row detection, block detection, false positives, NaN/Inf and exact column
   localization are reported.
+* independent conditions can run concurrently on multiple NPUs;
 
 The default matrix and experiment grid follow ``TEST_SPEC.md``.  A full run
 is intentionally large; use --k-values, --dtypes, --distributions and
@@ -31,7 +32,9 @@ import platform
 import random
 import subprocess
 import sys
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass, fields
 from datetime import datetime, timezone
 from pathlib import Path
@@ -42,6 +45,12 @@ import torch_npu
 from tqdm import tqdm
 
 import utils
+
+
+# Torch/NPU random seeding is process-global.  Serialize only matrix creation
+# so independent workers cannot reseed one another halfway through A/B/C setup.
+MATRIX_REFRESH_LOCK = threading.Lock()
+AUDIT_WRITE_LOCK = threading.Lock()
 
 
 BLOCK_M = 128
@@ -135,6 +144,13 @@ class InjectedFault:
 
 def parse_csv_values(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def parse_devices(value: str) -> list[str]:
+    devices = parse_csv_values(value)
+    if not devices:
+        raise argparse.ArgumentTypeError("at least one device is required")
+    return devices
 
 
 def parse_k_values(value: str) -> list[int]:
@@ -250,7 +266,9 @@ def detected_mask(d1: torch.Tensor, threshold: torch.Tensor) -> torch.Tensor:
 
 def write_audit(handle, record: dict[str, object]) -> None:
     if handle is not None:
-        handle.write(json.dumps(record, ensure_ascii=False, allow_nan=False) + "\n")
+        line = json.dumps(record, ensure_ascii=False, allow_nan=False) + "\n"
+        with AUDIT_WRITE_LOCK:
+            handle.write(line)
 
 
 def run_condition(
@@ -291,19 +309,24 @@ def run_condition(
     def refresh_matrices() -> None:
         """Create a new consistent A/B/C set and reset per-block reservations."""
         nonlocal a, b, c, matrix_generation, matrix_seed
-        matrix_generation += 1
-        matrix_seed = stable_condition_seed(
-            condition_seed, k, dtype_name, distribution.name, matrix_generation
-        )
-        set_seeds(matrix_seed)
-        used_positions_by_block.clear()
-        a = distribution.generator(
-            m, k, device=device, dtype=dtype, **distribution.params
-        )
-        b = distribution.generator(
-            k, n, device=device, dtype=dtype, **distribution.params
-        )
-        c = torch.matmul(a, b)
+        with MATRIX_REFRESH_LOCK:
+            torch_npu.npu.set_device(device)
+            matrix_generation += 1
+            matrix_seed = stable_condition_seed(
+                condition_seed, k, dtype_name, distribution.name, matrix_generation
+            )
+            set_seeds(matrix_seed)
+            used_positions_by_block.clear()
+            a = distribution.generator(
+                m, k, device=device, dtype=dtype, **distribution.params
+            )
+            b = distribution.generator(
+                k, n, device=device, dtype=dtype, **distribution.params
+            )
+            c = torch.matmul(a, b)
+            # Ensure the seeded generation has completed before another worker
+            # changes the process-wide NPU seed.
+            torch_npu.npu.synchronize()
 
     trial_iterator = tqdm(
         range(trials),
@@ -724,8 +747,20 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         help="base seed; default uses the current time in nanoseconds",
     )
-    parser.add_argument("--device", default="npu:0")
-    parser.add_argument("--block-m", type=int, default=BLOCK_M)
+    parser.add_argument(
+        "--device",
+        default="npu:-1",
+        help="single NPU device, or npu:-1 to use all detected NPUs",
+    )
+    parser.add_argument(
+        "--devices",
+        type=parse_devices,
+        help="comma-separated NPU devices for parallel conditions; overrides "
+        "--device (use --device npu:-1 for all detected NPUs)",
+    )
+    parser.add_argument(
+        "--block-m", type=int, default=BLOCK_M
+    )
     parser.add_argument("--block-n", type=int, default=BLOCK_N)
     parser.add_argument(
         "--output",
@@ -789,19 +824,32 @@ def main() -> int:
     except (ValueError, RuntimeError) as exc:
         parser.error(str(exc))
 
-    device = torch.device(args.device)
-    torch_npu.npu.set_device(device)
+    if args.devices is not None:
+        device_names = args.devices
+    elif args.device != "npu:-1":
+        # Preserve the legacy single-device behaviour when a non-default
+        # --device is explicitly selected.
+        device_names = [args.device]
+    else:
+        try:
+            detected_count = int(torch_npu.npu.device_count())
+        except (AttributeError, RuntimeError, TypeError, ValueError):
+            detected_count = 1
+        device_names = [f"npu:{index}" for index in range(max(1, detected_count))]
+    devices = [torch.device(name) for name in device_names]
+
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     metadata = {
         "run_id": run_id,
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "commit": git_commit(),
         "hostname": platform.node(),
-        "device": args.device,
+        "device": ",".join(device_names),
         "torch_version": safe_version(torch),
         "torch_npu_version": safe_version(torch_npu),
         "python_version": platform.python_version(),
     }
+    print(f"Using NPU devices: {', '.join(device_names)}", flush=True)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     if args.audit_jsonl is not None:
@@ -811,13 +859,19 @@ def main() -> int:
     summary_mode = "a" if args.append else "w"
     audit_mode = "a" if args.append else "w"
 
-    total_conditions = sum(
-        len(args.bits if args.bits is not None else EXPONENT_BITS[name])
-        for _k in args.k_values
-        for name in args.dtypes
-        for _dist in args.distributions
-    )
-    completed = 0
+    conditions: list[tuple[int, str, str, int, str]] = []
+    for k in args.k_values:
+        for dtype_name in args.dtypes:
+            for distribution_name in args.distributions:
+                bits = (
+                    args.bits
+                    if args.bits is not None
+                    else EXPONENT_BITS[dtype_name]
+                )
+                for bit in bits:
+                    label = f"K={k} {dtype_name} {distribution_name} bit={bit}"
+                    conditions.append((k, dtype_name, distribution_name, bit, label))
+    total_conditions = len(conditions)
 
     with args.output.open(summary_mode, newline="", encoding="utf-8") as summary_file:
         writer = csv.DictWriter(summary_file, fieldnames=summary_fieldnames())
@@ -838,62 +892,64 @@ def main() -> int:
                 disable=args.no_progress,
             )
             try:
-                for k in args.k_values:
-                    for dtype_name in args.dtypes:
-                        for distribution_name in args.distributions:
-                            distribution = DISTRIBUTIONS[distribution_name]
-                            bits = (
-                                args.bits
-                                if args.bits is not None
-                                else EXPONENT_BITS[dtype_name]
+                def execute_condition(task_index: int, task: tuple[int, str, str, int, str]):
+                    k, dtype_name, distribution_name, bit, label = task
+                    device_name = device_names[task_index % len(device_names)]
+                    device = devices[task_index % len(devices)]
+                    torch_npu.npu.set_device(device)
+                    result = run_condition(
+                        m=args.m,
+                        n=args.n,
+                        k=k,
+                        dtype_name=dtype_name,
+                        distribution=DISTRIBUTIONS[distribution_name],
+                        bit=bit,
+                        trials=args.trials,
+                        refresh_interval=args.refresh_interval,
+                        p_inject=args.p_inject,
+                        seed=args.seed,
+                        device=device,
+                        block_m=args.block_m,
+                        block_n=args.block_n,
+                        audit_handle=audit_file,
+                        show_progress=False,
+                        progress_label=label,
+                    )
+                    return task_index, label, device_name, result
+
+                with ThreadPoolExecutor(
+                    max_workers=len(devices), thread_name_prefix="vabft"
+                ) as executor:
+                    futures = [
+                        executor.submit(execute_condition, index, task)
+                        for index, task in enumerate(conditions)
+                    ]
+                    completed = 0
+                    for future in as_completed(futures):
+                        _task_index, label, device_name, result = future.result()
+                        completed += 1
+                        writer.writerow(
+                            {**metadata, "device": device_name, **result}
+                        )
+                        summary_file.flush()
+                        if audit_file is not None:
+                            with AUDIT_WRITE_LOCK:
+                                audit_file.flush()
+                        condition_progress.update(1)
+                        condition_progress.set_postfix_str(
+                            f"{label} on {device_name} row_DR={result['row_DR']}"
+                        )
+                        if args.no_progress:
+                            print(
+                                f"[{completed}/{total_conditions}] {label} "
+                                f"on {device_name} "
+                                f"row_DR={result['row_DR']} "
+                                f"block_DR={result['block_DR']} "
+                                f"loc={result['localization_R']} "
+                                f"row_FPR={result['row_FPR']} "
+                                f"NaN={result['nan_rate']}",
+                                flush=True,
                             )
-                            for bit in bits:
-                                completed += 1
-                                label = (
-                                    f"K={k} {dtype_name} {distribution_name} bit={bit}"
-                                )
-                                condition_progress.set_postfix_str(label)
-                                if args.no_progress:
-                                    print(
-                                        f"[{completed}/{total_conditions}] {label}",
-                                        flush=True,
-                                    )
-                                result = run_condition(
-                                    m=args.m,
-                                    n=args.n,
-                                    k=k,
-                                    dtype_name=dtype_name,
-                                    distribution=distribution,
-                                    bit=bit,
-                                    trials=args.trials,
-                                    refresh_interval=args.refresh_interval,
-                                    p_inject=args.p_inject,
-                                    seed=args.seed,
-                                    device=device,
-                                    block_m=args.block_m,
-                                    block_n=args.block_n,
-                                    audit_handle=audit_file,
-                                    show_progress=not args.no_progress,
-                                    progress_label=label,
-                                )
-                                writer.writerow({**metadata, **result})
-                                summary_file.flush()
-                                if audit_file is not None:
-                                    audit_file.flush()
-                                condition_progress.update(1)
-                                condition_progress.set_postfix_str(
-                                    f"{label} row_DR={result['row_DR']}"
-                                )
-                                if args.no_progress:
-                                    print(
-                                        "  "
-                                        f"row_DR={result['row_DR']} "
-                                        f"block_DR={result['block_DR']} "
-                                        f"loc={result['localization_R']} "
-                                        f"row_FPR={result['row_FPR']} "
-                                        f"NaN={result['nan_rate']}",
-                                        flush=True,
-                                    )
             finally:
                 condition_progress.close()
         finally:

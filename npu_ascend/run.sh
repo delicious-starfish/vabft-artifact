@@ -27,7 +27,7 @@ else
     OUTPUT_DIR="results/vabft_acc_hiPre_full_$(date +%Y%m%d_%H%M%S)"
 fi
 
-DEVICE="${DEVICE:-npu:0}"
+DEVICE="${DEVICE:-npu:-1}"
 TRIALS="${TRIALS:-10000}"
 REFRESH_INTERVAL="${REFRESH_INTERVAL:-256}"
 P_INJECT="${P_INJECT:-0.5}"
