@@ -20,9 +20,20 @@ from openpyxl.utils import get_column_letter
 COUNT_FIELDS = (
     "total_blocks",
     "all_injected",
+    "non_nan_injected",
     "nan_injected",
     "inf_injected",
     "finite_injected",
+    "non_nan_injected_rows",
+    "non_nan_detected_rows",
+    "non_nan_injected_blocks",
+    "non_nan_detected_blocks",
+    "non_nan_localized",
+    "nan_injected_rows",
+    "nan_detected_rows",
+    "nan_injected_blocks",
+    "nan_detected_blocks",
+    "nan_localized",
     "injected_rows",
     "detected_rows",
     "false_rows",
@@ -35,6 +46,14 @@ COUNT_FIELDS = (
 )
 
 RATE_FIELDS = (
+    "non_nan_row_DR",
+    "non_nan_block_DR",
+    "non_nan_localization_R",
+    "non_nan_conditional_localization_R",
+    "nan_row_DR",
+    "nan_block_DR",
+    "nan_localization_R",
+    "nan_conditional_localization_R",
     "row_DR",
     "block_DR",
     "row_FPR",
@@ -84,9 +103,12 @@ def load_results(path: Path) -> list[dict[str, object]]:
         "bit",
         "all_injected",
         "nan_injected",
-        "injected_rows",
-        "detected_rows",
-        "localized",
+        "non_nan_injected_rows",
+        "non_nan_detected_rows",
+        "non_nan_localized",
+        "nan_injected_rows",
+        "nan_detected_rows",
+        "nan_localized",
     }
     missing = required - set(raw_rows[0])
     if missing:
@@ -127,6 +149,24 @@ def aggregate(rows: Sequence[dict[str, object]]) -> dict[str, object]:
 
     result.update(
         {
+            "non_nan_row_DR": div(
+                "non_nan_detected_rows", "non_nan_injected_rows"
+            ),
+            "non_nan_block_DR": div(
+                "non_nan_detected_blocks", "non_nan_injected_blocks"
+            ),
+            "non_nan_localization_R": div(
+                "non_nan_localized", "non_nan_injected_rows"
+            ),
+            "non_nan_conditional_localization_R": div(
+                "non_nan_localized", "non_nan_detected_rows"
+            ),
+            "nan_row_DR": div("nan_detected_rows", "nan_injected_rows"),
+            "nan_block_DR": div("nan_detected_blocks", "nan_injected_blocks"),
+            "nan_localization_R": div("nan_localized", "nan_injected_rows"),
+            "nan_conditional_localization_R": div(
+                "nan_localized", "nan_detected_rows"
+            ),
             "row_DR": div("detected_rows", "injected_rows"),
             "block_DR": div("detected_blocks", "injected_blocks"),
             "row_FPR": div("false_rows", "clean_rows"),
@@ -152,6 +192,64 @@ def group_rows(
         item = dict(zip(keys, group_key))
         item.update(aggregate(groups[group_key]))
         output.append(item)
+    return output
+
+
+CATEGORY_PREFIX = {"非NaN": "non_nan", "NaN": "nan", "汇总": "total"}
+
+
+def category_view(summary: dict[str, object], category: str) -> dict[str, object]:
+    """Project one aggregate into a common block/row/localization schema."""
+    prefix = CATEGORY_PREFIX[category]
+    if prefix == "total":
+        names = {
+            "injected": "all_injected",
+            "injected_blocks": "injected_blocks",
+            "detected_blocks": "detected_blocks",
+            "injected_rows": "injected_rows",
+            "detected_rows": "detected_rows",
+            "localized": "localized",
+            "block_DR": "block_DR",
+            "row_DR": "row_DR",
+            "localization_R": "localization_R",
+            "conditional_localization_R": "conditional_localization_R",
+        }
+    else:
+        names = {
+            "injected": f"{prefix}_injected",
+            "injected_blocks": f"{prefix}_injected_blocks",
+            "detected_blocks": f"{prefix}_detected_blocks",
+            "injected_rows": f"{prefix}_injected_rows",
+            "detected_rows": f"{prefix}_detected_rows",
+            "localized": f"{prefix}_localized",
+            "block_DR": f"{prefix}_block_DR",
+            "row_DR": f"{prefix}_row_DR",
+            "localization_R": f"{prefix}_localization_R",
+            "conditional_localization_R": f"{prefix}_conditional_localization_R",
+        }
+    return {target: summary.get(source) for target, source in names.items()}
+
+
+def category_summary_rows(
+    rows: Sequence[dict[str, object]], category: str
+) -> list[dict[str, object]]:
+    output = [{"分组": "总体", **category_view(aggregate(rows), category)}]
+    dimensions = (
+        ("dtype",),
+        ("dtype", "bit"),
+        ("dtype", "distribution"),
+        ("dtype", "K"),
+    )
+    for keys in dimensions:
+        for item in group_rows(rows, keys):
+            labels = {key: item[key] for key in keys}
+            output.append(
+                {
+                    "分组": "+".join(keys),
+                    **labels,
+                    **category_view(item, category),
+                }
+            )
     return output
 
 
@@ -198,19 +296,40 @@ def inspect_audit(path: Path | None) -> AuditSummary | None:
 def display_name(field: str) -> str:
     names = {
         "conditions": "条件数",
+        "分组": "分组",
+        "injected": "注错数",
         "all_injected": "全部XOR注错",
+        "non_nan_injected": "非NaN注错",
         "nan_injected": "NaN注错",
         "inf_injected": "Inf注错",
         "finite_injected": "有限值注错",
-        "injected_rows": "有效注错行",
+        "non_nan_injected_rows": "非NaN注错行",
+        "non_nan_detected_rows": "非NaN行定位",
+        "non_nan_injected_blocks": "非NaN注错块",
+        "non_nan_detected_blocks": "非NaN块检出",
+        "non_nan_localized": "非NaN精确定位",
+        "nan_injected_rows": "NaN注错行",
+        "nan_detected_rows": "NaN行定位",
+        "nan_injected_blocks": "NaN注错块",
+        "nan_detected_blocks": "NaN块检出",
+        "nan_localized": "NaN精确定位",
+        "injected_rows": "注错行",
         "detected_rows": "检出行",
         "false_rows": "误检行",
         "clean_rows": "无错行",
-        "injected_blocks": "有效注错块",
+        "injected_blocks": "注错块",
         "detected_blocks": "检出块",
         "false_blocks": "误检块",
         "clean_blocks": "无错块",
         "localized": "精确定位",
+        "non_nan_row_DR": "非NaN行定位率",
+        "non_nan_block_DR": "非NaN块检出率",
+        "non_nan_localization_R": "非NaN精确定位率",
+        "non_nan_conditional_localization_R": "非NaN检出后定位率",
+        "nan_row_DR": "NaN行定位率",
+        "nan_block_DR": "NaN块检出率",
+        "nan_localization_R": "NaN精确定位率",
+        "nan_conditional_localization_R": "NaN检出后定位率",
         "row_DR": "行检出率",
         "block_DR": "块检出率",
         "row_FPR": "行误检率",
@@ -261,30 +380,19 @@ def create_xlsx(
     workbook.remove(workbook.active)
     detail_columns = list(rows[0])
     write_sheet(workbook, "完整数据", rows, detail_columns)
-    write_sheet(
-        workbook,
-        "dtype汇总",
-        group_rows(rows, ("dtype",)),
-        ("dtype", *SUMMARY_FIELDS),
+    category_columns = (
+        "分组", "dtype", "bit", "distribution", "K", "injected",
+        "injected_blocks", "detected_blocks", "block_DR", "injected_rows",
+        "detected_rows", "row_DR", "localized", "localization_R",
+        "conditional_localization_R",
     )
-    write_sheet(
-        workbook,
-        "bit汇总",
-        group_rows(rows, ("dtype", "bit")),
-        ("dtype", "bit", *SUMMARY_FIELDS),
-    )
-    write_sheet(
-        workbook,
-        "分布汇总",
-        group_rows(rows, ("dtype", "distribution")),
-        ("dtype", "distribution", *SUMMARY_FIELDS),
-    )
-    write_sheet(
-        workbook,
-        "K汇总",
-        group_rows(rows, ("dtype", "K")),
-        ("dtype", "K", *SUMMARY_FIELDS),
-    )
+    for category in CATEGORY_PREFIX:
+        write_sheet(
+            workbook,
+            f"{category}汇总" if category != "汇总" else "总体汇总",
+            category_summary_rows(rows, category),
+            category_columns,
+        )
     if audit is not None:
         audit_row = {
             "records": audit.records,
@@ -334,11 +442,6 @@ def create_markdown(
     audit: AuditSummary | None,
 ) -> None:
     first = rows[0]
-    dtype_summary = group_rows(rows, ("dtype",))
-    bit_summary = group_rows(rows, ("dtype", "bit"))
-    distribution_summary = group_rows(rows, ("dtype", "distribution"))
-    overall = aggregate(rows)
-
     lines = [
         "# V-ABFT 错误注入实验报告",
         "",
@@ -355,64 +458,39 @@ def create_markdown(
         f"- block 注错概率：`{first.get('p_inject')}`",
         f"- 条件数：`{len(rows)}`",
         "",
-        "## 2. 总体汇总",
-        "",
     ]
-    total_row = {"范围": "全部", **overall}
-    total_columns = (
-        "范围",
-        "all_injected",
-        "nan_injected",
-        "inf_injected",
-        "injected_rows",
-        "detected_rows",
-        "localized",
-        "row_DR",
-        "localization_R",
-        "row_FPR",
-        "block_FPR",
+    metric_columns = (
+        "injected", "injected_blocks", "detected_blocks", "block_DR",
+        "injected_rows", "detected_rows", "row_DR", "localized",
+        "localization_R", "conditional_localization_R",
     )
-    lines.extend(markdown_table([total_row], total_columns, set(RATE_FIELDS)))
-    lines.extend(["", "## 3. 按 dtype 汇总", ""])
-    summary_columns = (
-        "dtype",
-        "all_injected",
-        "nan_injected",
-        "injected_rows",
-        "detected_rows",
-        "localized",
-        "row_DR",
-        "localization_R",
-        "row_FPR",
+    dimension_specs = (
+        ("按 dtype", ("dtype",)),
+        ("按指数位", ("dtype", "bit")),
+        ("按输入分布", ("dtype", "distribution")),
+        ("按 K", ("dtype", "K")),
     )
-    lines.extend(markdown_table(dtype_summary, summary_columns, set(RATE_FIELDS)))
-    lines.extend(["", "## 4. 按指数位汇总", ""])
-    bit_columns = (
-        "dtype",
-        "bit",
-        "all_injected",
-        "nan_injected",
-        "injected_rows",
-        "detected_rows",
-        "localized",
-        "row_DR",
-        "localization_R",
-    )
-    lines.extend(markdown_table(bit_summary, bit_columns, set(RATE_FIELDS)))
-    lines.extend(["", "## 5. 按输入分布汇总", ""])
-    dist_columns = (
-        "dtype",
-        "distribution",
-        "all_injected",
-        "nan_injected",
-        "injected_rows",
-        "detected_rows",
-        "localized",
-        "row_DR",
-        "localization_R",
-    )
-    lines.extend(markdown_table(distribution_summary, dist_columns, set(RATE_FIELDS)))
-    lines.extend(["", "## 6. 注错审计", ""])
+    for section_number, category in enumerate(CATEGORY_PREFIX, 2):
+        lines.extend([f"## {section_number}. {category}", "", "### 总体", ""])
+        overall = category_view(aggregate(rows), category)
+        lines.extend(markdown_table([overall], metric_columns, set(RATE_FIELDS)))
+        for title, keys in dimension_specs:
+            projected = []
+            for item in group_rows(rows, keys):
+                projected.append(
+                    {
+                        **{key: item[key] for key in keys},
+                        **category_view(item, category),
+                    }
+                )
+            lines.extend(["", f"### {title}", ""])
+            lines.extend(
+                markdown_table(
+                    projected, (*keys, *metric_columns), set(RATE_FIELDS)
+                )
+            )
+
+    lines.extend(["", "## 5. 注错审计", ""])
     if audit is None:
         lines.append("未提供 audit JSONL，未执行坐标去重与翻转方向检查。")
     else:
@@ -430,10 +508,12 @@ def create_markdown(
     lines.extend(
         [
             "",
-            "## 7. 说明",
+            "## 6. 说明",
             "",
             "- 所有汇总率均由整数计数加总后重新计算，不平均条件级百分比。",
-            "- 主检出率和定位率排除注错后变为 NaN 的样本。",
+            "- 统一检出规则为 D1 差值是 NaN/Inf，或 `|D1| >= threshold`。",
+            "- NaN 仅单列统计；D1、D2 均为 NaN，无法通过 D2/D1 定位列，因此精确定位记为失败。",
+            "- 汇总项的分母包含非 NaN 与 NaN，且汇总计数等于两类计数之和。",
             "- `NA` 表示分母为零，不能解释为 0%。",
         ]
     )

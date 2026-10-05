@@ -86,9 +86,21 @@ EXPONENT_BITS = {
 class Counters:
     total_blocks: int = 0
     all_injected: int = 0
+    non_nan_injected: int = 0
     nan_injected: int = 0
     inf_injected: int = 0
     finite_injected: int = 0
+    non_nan_injected_rows: int = 0
+    non_nan_detected_rows: int = 0
+    non_nan_injected_blocks: int = 0
+    non_nan_detected_blocks: int = 0
+    non_nan_localized: int = 0
+    nan_injected_rows: int = 0
+    nan_detected_rows: int = 0
+    nan_injected_blocks: int = 0
+    nan_detected_blocks: int = 0
+    nan_localized: int = 0
+    # The unprefixed fields are totals across non-NaN and NaN faults.
     injected_rows: int = 0
     detected_rows: int = 0
     false_rows: int = 0
@@ -229,8 +241,8 @@ def xor_scalar(
 
 
 def detected_mask(d1: torch.Tensor, threshold: torch.Tensor) -> torch.Tensor:
-    """NaN is not detected; +/-Inf is always detected."""
-    return torch.isinf(d1) | (torch.isfinite(d1) & (d1.abs() >= threshold))
+    """A NaN/Inf difference or an absolute difference over threshold is detected."""
+    return torch.isnan(d1) | (d1.abs() >= threshold)
 
 
 def write_audit(handle, record: dict[str, object]) -> None:
@@ -376,6 +388,8 @@ def run_condition(
                 d1 = d1_all[row_start:row_end]
                 d2 = d2_all[row_start:row_end]
                 threshold = threshold_all[row_start:row_end]
+                # The detection rule is uniform: D1 is NaN/Inf, or
+                # abs(D1) >= threshold. NaN is separated only in statistics.
                 reported = detected_mask(d1, threshold)
                 fault = faults.get(block_id)
 
@@ -397,6 +411,22 @@ def run_condition(
 
                 if fault.classification == "nan":
                     counters.nan_injected += 1
+                    counters.nan_injected_rows += 1
+                    counters.nan_injected_blocks += 1
+                    counters.injected_rows += 1
+                    counters.injected_blocks += 1
+
+                    block_detected = bool(reported.any().item())
+                    row_detected = bool(reported[fault.local_row].item())
+                    # D1 and D2 are both NaN, so D2 / D1 cannot recover a
+                    # column. Do not inspect C to manufacture a localization.
+                    localized = False
+                    if block_detected:
+                        counters.nan_detected_blocks += 1
+                        counters.detected_blocks += 1
+                    if row_detected:
+                        counters.nan_detected_rows += 1
+                        counters.detected_rows += 1
                     write_audit(
                         audit_handle,
                         {
@@ -409,13 +439,19 @@ def run_condition(
                             "matrix_seed": matrix_seed,
                             **asdict(fault),
                             "bit": bit,
-                            "detected": None,
-                            "localized": None,
+                            "estimated_local_column": None,
+                            "block_detected": block_detected,
+                            "row_detected": row_detected,
+                            "detected": row_detected,
+                            "localized": localized,
                         },
                     )
                     block_id += 1
                     continue
 
+                counters.non_nan_injected += 1
+                counters.non_nan_injected_blocks += 1
+                counters.non_nan_injected_rows += 1
                 counters.injected_blocks += 1
                 counters.injected_rows += 1
                 if fault.classification == "inf":
@@ -427,6 +463,8 @@ def run_condition(
                 localized_col: int | None = None
                 localized = False
                 if row_detected:
+                    counters.non_nan_detected_rows += 1
+                    counters.non_nan_detected_blocks += 1
                     counters.detected_rows += 1
                     counters.detected_blocks += 1
                     d1_value = d1[fault.local_row]
@@ -442,6 +480,7 @@ def run_condition(
                         )
                         localized = localized_col == fault.local_col
                         if localized:
+                            counters.non_nan_localized += 1
                             counters.localized += 1
 
                 write_audit(
@@ -457,6 +496,8 @@ def run_condition(
                         **asdict(fault),
                         "bit": bit,
                         "estimated_local_column": localized_col,
+                        "block_detected": row_detected,
+                        "row_detected": row_detected,
                         "detected": row_detected,
                         "localized": localized,
                     },
@@ -465,7 +506,25 @@ def run_condition(
 
         del c_faulty
 
-    eligible = counters.injected_rows
+    assert counters.all_injected == (
+        counters.non_nan_injected + counters.nan_injected
+    )
+    assert counters.injected_blocks == (
+        counters.non_nan_injected_blocks + counters.nan_injected_blocks
+    )
+    assert counters.detected_blocks == (
+        counters.non_nan_detected_blocks + counters.nan_detected_blocks
+    )
+    assert counters.injected_rows == (
+        counters.non_nan_injected_rows + counters.nan_injected_rows
+    )
+    assert counters.detected_rows == (
+        counters.non_nan_detected_rows + counters.nan_detected_rows
+    )
+    assert counters.localized == (
+        counters.non_nan_localized + counters.nan_localized
+    )
+
     result: dict[str, object] = asdict(counters)
     result.update(
         {
@@ -480,11 +539,33 @@ def run_condition(
             "C": trials,
             "refresh_interval": refresh_interval,
             "p_inject": p_inject,
-            "row_DR": rate(counters.detected_rows, eligible),
+            "non_nan_row_DR": rate(
+                counters.non_nan_detected_rows, counters.non_nan_injected_rows
+            ),
+            "non_nan_block_DR": rate(
+                counters.non_nan_detected_blocks, counters.non_nan_injected_blocks
+            ),
+            "non_nan_localization_R": rate(
+                counters.non_nan_localized, counters.non_nan_injected_rows
+            ),
+            "non_nan_conditional_localization_R": rate(
+                counters.non_nan_localized, counters.non_nan_detected_rows
+            ),
+            "nan_row_DR": rate(counters.nan_detected_rows, counters.nan_injected_rows),
+            "nan_block_DR": rate(
+                counters.nan_detected_blocks, counters.nan_injected_blocks
+            ),
+            "nan_localization_R": rate(
+                counters.nan_localized, counters.nan_injected_rows
+            ),
+            "nan_conditional_localization_R": rate(
+                counters.nan_localized, counters.nan_detected_rows
+            ),
+            "row_DR": rate(counters.detected_rows, counters.injected_rows),
             "block_DR": rate(counters.detected_blocks, counters.injected_blocks),
             "row_FPR": rate(counters.false_rows, counters.clean_rows),
             "block_FPR": rate(counters.false_blocks, counters.clean_blocks),
-            "localization_R": rate(counters.localized, eligible),
+            "localization_R": rate(counters.localized, counters.injected_rows),
             "conditional_localization_R": rate(
                 counters.localized, counters.detected_rows
             ),
@@ -529,6 +610,14 @@ def summary_fieldnames() -> list[str]:
     ]
     counter_names = [item.name for item in fields(Counters)]
     metrics = [
+        "non_nan_row_DR",
+        "non_nan_block_DR",
+        "non_nan_localization_R",
+        "non_nan_conditional_localization_R",
+        "nan_row_DR",
+        "nan_block_DR",
+        "nan_localization_R",
+        "nan_conditional_localization_R",
         "row_DR",
         "block_DR",
         "row_FPR",
