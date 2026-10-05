@@ -4,7 +4,11 @@
 This is the unified successor to ``vabft_acc.py``:
 
 * BF16 bits 7..14 and FP32 bits 23..30 are tested;
-* every bit is flipped with XOR (both 0->1 and 1->0 are accepted);
+* every bit is flipped with XOR in the 0->1 direction only;
+* each injection has at most 20 random candidate positions; if none has a
+  clear target bit, A/B/C are regenerated and that trial is retried;
+* candidate selections are capped at 20 times the condition's maximum total
+  injections, so repeated matrix regeneration cannot loop forever;
 * A/B/C are regenerated periodically (``--refresh-interval``, default 256);
 * C is actually modified before checksums and thresholds are computed;
 * detection is evaluated per 128x256 output block;
@@ -162,7 +166,7 @@ def set_seeds(seed: int) -> None:
         torch_npu.npu.manual_seed_all(seed)
 
 
-def draw_unique_position(
+def draw_unused_position(
     rng: random.Random,
     used_positions: set[tuple[int, int]],
     row_start: int,
@@ -170,7 +174,7 @@ def draw_unique_position(
     col_start: int,
     col_end: int,
 ) -> tuple[int, int]:
-    """Uniformly draw an unused matrix coordinate from one output block."""
+    """Uniformly draw an unused coordinate without reserving it yet."""
     height = row_end - row_start
     width = col_end - col_start
     capacity = height * width
@@ -187,7 +191,6 @@ def draw_unique_position(
         row = rng.randrange(row_start, row_end)
         col = rng.randrange(col_start, col_end)
         if (row, col) not in used_positions:
-            used_positions.add((row, col))
             return row, col
 
 
@@ -279,6 +282,28 @@ def run_condition(
     matrix_generation = -1
     matrix_seed = condition_seed
     used_positions_by_block: dict[int, set[tuple[int, int]]] = {}
+    blocks_per_trial = math.ceil(m / block_m) * math.ceil(n / block_n)
+    # A block has at most one injected element in a trial.  p_inject makes the
+    # realised count random, so use the deterministic upper bound here.
+    max_injection_attempts = 20 * trials * blocks_per_trial
+    injection_attempts = 0
+
+    def refresh_matrices() -> None:
+        """Create a new consistent A/B/C set and reset per-block reservations."""
+        nonlocal a, b, c, matrix_generation, matrix_seed
+        matrix_generation += 1
+        matrix_seed = stable_condition_seed(
+            condition_seed, k, dtype_name, distribution.name, matrix_generation
+        )
+        set_seeds(matrix_seed)
+        used_positions_by_block.clear()
+        a = distribution.generator(
+            m, k, device=device, dtype=dtype, **distribution.params
+        )
+        b = distribution.generator(
+            k, n, device=device, dtype=dtype, **distribution.params
+        )
+        c = torch.matmul(a, b)
 
     trial_iterator = tqdm(
         range(trials),
@@ -292,71 +317,96 @@ def run_condition(
         # Refresh A/B/C at a deterministic interval.  C is always generated
         # as A @ B; merely reseeding C independently would violate GEMM.
         if trial % refresh_interval == 0:
-            matrix_generation += 1
-            matrix_seed = stable_condition_seed(
-                condition_seed, k, dtype_name, distribution.name, matrix_generation
-            )
-            set_seeds(matrix_seed)
-            used_positions_by_block.clear()
-            a = distribution.generator(
-                m, k, device=device, dtype=dtype, **distribution.params
-            )
-            b = distribution.generator(
-                k, n, device=device, dtype=dtype, **distribution.params
-            )
-            c = torch.matmul(a, b)
+            refresh_matrices()
 
         assert a is not None and b is not None and c is not None
-        # The required order is: C=A@B -> copy C -> inject into C_faulty ->
-        # calculate threshold/checksums -> compare.
-        c_faulty = c.clone()
-        faults: dict[int, InjectedFault] = {}
-        block_id = 0
+        # An injection only accepts a clear target bit (0->1).  If a selected
+        # block cannot provide one in 20 draws, start the entire trial over
+        # with a new consistent A/B/C set; partial faults must not survive the
+        # replacement of their source matrix.  The condition-wide candidate
+        # count is capped to make this retry path finite.
+        while True:
+            # The required order is: C=A@B -> copy C -> inject into C_faulty
+            # -> calculate threshold/checksums -> compare.
+            c_faulty = c.clone()
+            faults: dict[int, InjectedFault] = {}
+            block_id = 0
+            retry_with_new_matrices = False
 
-        for col_start in range(0, n, block_n):
-            col_end = min(col_start + block_n, n)
-            for row_start in range(0, m, block_m):
-                row_end = min(row_start + block_m, m)
-                counters.total_blocks += 1
-                if rng.random() < p_inject:
-                    global_row, global_col = draw_unique_position(
-                        rng,
-                        used_positions_by_block.setdefault(block_id, set()),
-                        row_start,
-                        row_end,
-                        col_start,
-                        col_end,
-                    )
-                    local_row = global_row - row_start
-                    local_col = global_col - col_start
-                    before = c_faulty[global_row, global_col]
-                    after_cpu, direction, raw_before, raw_after = xor_scalar(
-                        before, bit, dtype
-                    )
-                    c_faulty[global_row, global_col] = after_cpu.to(device=device)
-                    if bool(torch.isnan(after_cpu).item()):
-                        classification = "nan"
-                    elif bool(torch.isinf(after_cpu).item()):
-                        classification = "inf"
-                    else:
-                        classification = "finite"
-                    faults[block_id] = InjectedFault(
-                        block_id=block_id,
-                        row_start=row_start,
-                        row_end=row_end,
-                        col_start=col_start,
-                        col_end=col_end,
-                        local_row=local_row,
-                        local_col=local_col,
-                        global_row=global_row,
-                        global_col=global_col,
-                        direction=direction,
-                        raw_before=raw_before,
-                        raw_after=raw_after,
-                        classification=classification,
-                    )
-                    counters.all_injected += 1
-                block_id += 1
+            for col_start in range(0, n, block_n):
+                col_end = min(col_start + block_n, n)
+                for row_start in range(0, m, block_m):
+                    row_end = min(row_start + block_m, m)
+                    if rng.random() < p_inject:
+                        used_positions = used_positions_by_block.setdefault(
+                            block_id, set()
+                        )
+                        fault: InjectedFault | None = None
+                        for _attempt in range(20):
+                            if injection_attempts >= max_injection_attempts:
+                                raise RuntimeError(
+                                    "maximum injection candidate attempts exceeded "
+                                    f"({max_injection_attempts} = 20 * {trials} "
+                                    f"trials * {blocks_per_trial} blocks); "
+                                    "could not complete 0->1 injection"
+                                )
+                            injection_attempts += 1
+                            global_row, global_col = draw_unused_position(
+                                rng,
+                                used_positions,
+                                row_start,
+                                row_end,
+                                col_start,
+                                col_end,
+                            )
+                            before = c_faulty[global_row, global_col]
+                            after_cpu, direction, raw_before, raw_after = xor_scalar(
+                                before, bit, dtype
+                            )
+                            if direction != "0->1":
+                                continue
+
+                            used_positions.add((global_row, global_col))
+                            c_faulty[global_row, global_col] = after_cpu.to(
+                                device=device
+                            )
+                            if bool(torch.isnan(after_cpu).item()):
+                                classification = "nan"
+                            elif bool(torch.isinf(after_cpu).item()):
+                                classification = "inf"
+                            else:
+                                classification = "finite"
+                            fault = InjectedFault(
+                                block_id=block_id,
+                                row_start=row_start,
+                                row_end=row_end,
+                                col_start=col_start,
+                                col_end=col_end,
+                                local_row=global_row - row_start,
+                                local_col=global_col - col_start,
+                                global_row=global_row,
+                                global_col=global_col,
+                                direction=direction,
+                                raw_before=raw_before,
+                                raw_after=raw_after,
+                                classification=classification,
+                            )
+                            break
+
+                        if fault is None:
+                            retry_with_new_matrices = True
+                            break
+                        faults[block_id] = fault
+                    block_id += 1
+                if retry_with_new_matrices:
+                    break
+
+            if not retry_with_new_matrices:
+                counters.total_blocks += block_id
+                counters.all_injected += len(faults)
+                break
+            refresh_matrices()
+            assert a is not None and b is not None and c is not None
 
         # Everything below is deliberately computed after C_faulty has been
         # modified.  No clean-D1-plus-delta shortcut is used.
