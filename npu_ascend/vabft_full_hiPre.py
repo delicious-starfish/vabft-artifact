@@ -9,7 +9,8 @@ This is the unified successor to ``vabft_acc.py``:
   clear target bit, A/B/C are regenerated and that trial is retried;
 * candidate selections are capped at 20 times the condition's maximum total
   injections, so repeated matrix regeneration cannot loop forever;
-* A/B/C are regenerated periodically (``--refresh-interval``, default 256);
+* A/B/C are reused across trials and regenerated only after 20 failed
+  injection attempts;
 * C is actually modified before checksums and thresholds are computed;
 * detection is evaluated per 128x256 output block;
 * row detection, block detection, false positives, NaN/Inf and exact column
@@ -28,13 +29,15 @@ import csv
 import hashlib
 import json
 import math
+import multiprocessing as mp
 import platform
+import queue
 import random
+import shutil
 import subprocess
 import sys
-import threading
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import traceback
 from dataclasses import asdict, dataclass, fields
 from datetime import datetime, timezone
 from pathlib import Path
@@ -45,12 +48,6 @@ import torch_npu
 from tqdm import tqdm
 
 import utils
-
-
-# Torch/NPU random seeding is process-global.  Serialize only matrix creation
-# so independent workers cannot reseed one another halfway through A/B/C setup.
-MATRIX_REFRESH_LOCK = threading.Lock()
-AUDIT_WRITE_LOCK = threading.Lock()
 
 
 BLOCK_M = 128
@@ -179,35 +176,18 @@ def set_seeds(seed: int) -> None:
     random.seed(seed)
     torch.manual_seed(seed)
     if torch_npu.npu.is_available():
-        torch_npu.npu.manual_seed_all(seed)
+        torch_npu.npu.manual_seed(seed)
 
 
-def draw_unused_position(
+def draw_position(
     rng: random.Random,
-    used_positions: set[tuple[int, int]],
     row_start: int,
     row_end: int,
     col_start: int,
     col_end: int,
 ) -> tuple[int, int]:
-    """Uniformly draw an unused coordinate without reserving it yet."""
-    height = row_end - row_start
-    width = col_end - col_start
-    capacity = height * width
-    if len(used_positions) >= capacity:
-        raise RuntimeError(
-            f"all {capacity} positions in block "
-            f"rows[{row_start}:{row_end}) cols[{col_start}:{col_end}) were used; "
-            "reduce --refresh-interval"
-        )
-
-    # Rejection sampling is uniform and fast at the intended occupancy
-    # (default: at most 256 / 32768 positions per block).
-    while True:
-        row = rng.randrange(row_start, row_end)
-        col = rng.randrange(col_start, col_end)
-        if (row, col) not in used_positions:
-            return row, col
+    """Draw one random candidate; the caller decides whether it is usable."""
+    return rng.randrange(row_start, row_end), rng.randrange(col_start, col_end)
 
 
 def git_commit() -> str:
@@ -266,9 +246,7 @@ def detected_mask(d1: torch.Tensor, threshold: torch.Tensor) -> torch.Tensor:
 
 def write_audit(handle, record: dict[str, object]) -> None:
     if handle is not None:
-        line = json.dumps(record, ensure_ascii=False, allow_nan=False) + "\n"
-        with AUDIT_WRITE_LOCK:
-            handle.write(line)
+        handle.write(json.dumps(record, ensure_ascii=False, allow_nan=False) + "\n")
 
 
 def run_condition(
@@ -309,33 +287,54 @@ def run_condition(
     max_injection_attempts = 20 * trials * blocks_per_trial
     injection_attempts = 0
     injection_unavailable = False
+    verification_cache: list[tuple[int, int, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]] = []
 
     def refresh_matrices() -> None:
-        """Create a new consistent A/B/C set and reset per-block reservations."""
+        """Create A/B/C and cache all matrix-invariant verification tensors."""
         nonlocal a, b, c, a_fp32, b_fp32, c_fp32, matrix_generation, matrix_seed
-        with MATRIX_REFRESH_LOCK:
-            torch_npu.npu.set_device(device)
-            matrix_generation += 1
-            matrix_seed = stable_condition_seed(
-                condition_seed, k, dtype_name, distribution.name, matrix_generation
+        nonlocal verification_cache
+        torch_npu.npu.set_device(device)
+        matrix_generation += 1
+        # Every bit task for the same (K, dtype, distribution) starts from the
+        # same matrix seed, while each process generates its own local copy.
+        matrix_seed = stable_condition_seed(
+            seed, k, dtype_name, distribution.name, matrix_generation
+        )
+        set_seeds(matrix_seed)
+        used_positions_by_block.clear()
+        a = distribution.generator(
+            m, k, device=device, dtype=dtype, **distribution.params
+        )
+        b = distribution.generator(
+            k, n, device=device, dtype=dtype, **distribution.params
+        )
+        c = torch.matmul(a, b)
+        a_fp32 = a.float()
+        b_fp32 = b.float()
+        c_fp32 = c.float()
+
+        verification_cache = []
+        for col_start in range(0, n, block_n):
+            col_end = min(col_start + block_n, n)
+            width = col_end - col_start
+            b_slice_fp32 = b_fp32[:, col_start:col_end]
+            weights = (
+                torch.arange(width, dtype=torch.float32, device=device)
+                - (width - 1) / 2.0
             )
-            set_seeds(matrix_seed)
-            used_positions_by_block.clear()
-            a = distribution.generator(
-                m, k, device=device, dtype=dtype, **distribution.params
+            threshold_all = utils.my_bound_improve_robust(
+                a_fp32, b_slice_fp32, dtype=torch.float32
+            ).float()
+            abe = (a_fp32 @ b_slice_fp32.sum(dim=1, keepdim=True)).squeeze(1)
+            abw = (a_fp32 @ (b_slice_fp32 @ weights.unsqueeze(1))).squeeze(1)
+            verification_cache.append(
+                (col_start, col_end, weights, threshold_all, abe, abw)
             )
-            b = distribution.generator(
-                k, n, device=device, dtype=dtype, **distribution.params
-            )
-            c = torch.matmul(a, b)
-            # Keep the execution-precision matrices for fault injection, but
-            # create explicit FP32 copies for all checksum/threshold math.
-            a_fp32 = a.float()
-            b_fp32 = b.float()
-            c_fp32 = c.float()
-            # Ensure the seeded generation has completed before another worker
-            # changes the process-wide NPU seed.
-            torch_npu.npu.synchronize()
+        torch_npu.npu.synchronize()
+
+    # The first matrix set is created once.  Later refreshes happen only when
+    # one injection operation exhausts its 20 failed candidate attempts.
+    refresh_matrices()
 
     trial_iterator = tqdm(
         range(trials),
@@ -346,11 +345,6 @@ def run_condition(
         disable=not show_progress,
     )
     for trial in trial_iterator:
-        # Refresh A/B/C at a deterministic interval.  C is always generated
-        # as A @ B; merely reseeding C independently would violate GEMM.
-        if trial % refresh_interval == 0:
-            refresh_matrices()
-
         assert (
             a is not None
             and b is not None
@@ -388,14 +382,15 @@ def run_condition(
                                 attempts_exhausted = True
                                 break
                             injection_attempts += 1
-                            global_row, global_col = draw_unused_position(
+                            global_row, global_col = draw_position(
                                 rng,
-                                used_positions,
                                 row_start,
                                 row_end,
                                 col_start,
                                 col_end,
                             )
+                            if (global_row, global_col) in used_positions:
+                                continue
                             before = c_faulty[global_row, global_col]
                             after_cpu, direction, raw_before, raw_after = xor_scalar(
                                 before, bit, dtype
@@ -466,25 +461,12 @@ def run_condition(
         if injection_unavailable:
             break
 
-        # Everything below is deliberately computed after C_faulty has been
-        # modified.  No clean-D1-plus-delta shortcut is used.
+        # Only the C-dependent residuals are recomputed per trial.  Threshold,
+        # Be and weighted Be are cached until A/B/C are regenerated.
         block_id = 0
-        for col_start in range(0, n, block_n):
-            col_end = min(col_start + block_n, n)
+        for col_start, col_end, weights, threshold_all, abe, abw in verification_cache:
             width = col_end - col_start
-            b_slice_fp32 = b_fp32[:, col_start:col_end]
             c_slice_fp32 = c_faulty_fp32[:, col_start:col_end]
-            weights = (
-                torch.arange(width, dtype=torch.float32, device=device)
-                - (width - 1) / 2.0
-            )
-
-            # Threshold is recalculated only after fault injection, as is D1/D2.
-            threshold_all = utils.my_bound_improve_robust(
-                a_fp32, b_slice_fp32, dtype=torch.float32
-            ).float()
-            abe = (a_fp32 @ b_slice_fp32.sum(dim=1, keepdim=True)).squeeze(1)
-            abw = (a_fp32 @ (b_slice_fp32 @ weights.unsqueeze(1))).squeeze(1)
             d1_all = abe - c_slice_fp32.sum(dim=1)
             d2_all = abw - c_slice_fp32 @ weights
 
@@ -793,7 +775,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--refresh-interval",
         type=int,
         default=256,
-        help="regenerate seeded A/B/C after this many trials (default: 256)",
+        help="deprecated compatibility option; matrix refresh is failure-driven",
     )
     parser.add_argument("--p-inject", type=float, default=0.5)
     parser.add_argument(
@@ -836,8 +818,8 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def validate_args(args: argparse.Namespace) -> None:
-    if args.m <= 0 or args.n <= 0 or args.trials <= 0 or args.refresh_interval <= 0:
-        raise ValueError("M, N, trials and refresh-interval must be positive")
+    if args.m <= 0 or args.n <= 0 or args.trials <= 0:
+        raise ValueError("M, N and trials must be positive")
     if args.block_m <= 0 or args.block_n <= 0:
         raise ValueError("block sizes must be positive")
     if not 0.0 <= args.p_inject <= 1.0:
@@ -856,16 +838,53 @@ def validate_args(args: argparse.Namespace) -> None:
         invalid = {name: bits for name, bits in invalid.items() if bits}
         if invalid:
             raise ValueError(f"bits outside the selected dtype exponent range: {invalid}")
-    min_block_height = args.m % args.block_m or min(args.m, args.block_m)
-    min_block_width = args.n % args.block_n or min(args.n, args.block_n)
-    min_block_capacity = min_block_height * min_block_width
-    if args.refresh_interval > min_block_capacity:
-        raise ValueError(
-            "refresh-interval exceeds the smallest block's number of unique "
-            f"positions ({min_block_capacity})"
-        )
     if not torch_npu.npu.is_available():
         raise RuntimeError("Ascend NPU is required; CPU fallback is not a formal run")
+
+
+def device_worker(
+    device_name: str,
+    indexed_tasks: list[tuple[int, tuple[int, str, str, int, str]]],
+    config: dict[str, object],
+    result_queue,
+    audit_part: str | None,
+) -> None:
+    """Run a persistent, device-pinned worker in its own process."""
+    audit_handle = None
+    try:
+        device = torch.device(device_name)
+        torch_npu.npu.set_device(device)
+        if audit_part is not None:
+            audit_handle = Path(audit_part).open("w", encoding="utf-8")
+        for task_index, task in indexed_tasks:
+            k, dtype_name, distribution_name, bit, label = task
+            result = run_condition(
+                m=int(config["m"]),
+                n=int(config["n"]),
+                k=k,
+                dtype_name=dtype_name,
+                distribution=DISTRIBUTIONS[distribution_name],
+                bit=bit,
+                trials=int(config["trials"]),
+                refresh_interval=int(config["refresh_interval"]),
+                p_inject=float(config["p_inject"]),
+                seed=int(config["seed"]),
+                device=device,
+                block_m=int(config["block_m"]),
+                block_n=int(config["block_n"]),
+                audit_handle=audit_handle,
+                show_progress=False,
+                progress_label=label,
+            )
+            if audit_handle is not None:
+                audit_handle.flush()
+            result_queue.put(("result", task_index, label, device_name, result))
+    except BaseException:
+        result_queue.put(("error", device_name, traceback.format_exc()))
+    finally:
+        if audit_handle is not None:
+            audit_handle.close()
+        result_queue.put(("done", device_name))
 
 
 def main() -> int:
@@ -891,8 +910,6 @@ def main() -> int:
         except (AttributeError, RuntimeError, TypeError, ValueError):
             detected_count = 1
         device_names = [f"npu:{index}" for index in range(max(1, detected_count))]
-    devices = [torch.device(name) for name in device_names]
-
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     metadata = {
         "run_id": run_id,
@@ -912,8 +929,6 @@ def main() -> int:
 
     file_exists = args.output.exists() and args.output.stat().st_size > 0
     summary_mode = "a" if args.append else "w"
-    audit_mode = "a" if args.append else "w"
-
     conditions: list[tuple[int, str, str, int, str]] = []
     for k in args.k_values:
         for dtype_name in args.dtypes:
@@ -927,17 +942,41 @@ def main() -> int:
                     label = f"K={k} {dtype_name} {distribution_name} bit={bit}"
                     conditions.append((k, dtype_name, distribution_name, bit, label))
     total_conditions = len(conditions)
+    tasks_by_device: list[list[tuple[int, tuple[int, str, str, int, str]]]] = [
+        [] for _ in device_names
+    ]
+    for task_index, task in enumerate(conditions):
+        tasks_by_device[task_index % len(device_names)].append((task_index, task))
+
+    worker_config: dict[str, object] = {
+        "m": args.m,
+        "n": args.n,
+        "trials": args.trials,
+        "refresh_interval": args.refresh_interval,
+        "p_inject": args.p_inject,
+        "seed": args.seed,
+        "block_m": args.block_m,
+        "block_n": args.block_n,
+    }
+    audit_parts: list[Path | None] = []
+    for worker_index, _device_name in enumerate(device_names):
+        if args.audit_jsonl is None:
+            audit_parts.append(None)
+        else:
+            audit_parts.append(
+                args.audit_jsonl.with_name(
+                    f".{args.audit_jsonl.name}.{run_id}.worker{worker_index}.part"
+                )
+            )
 
     with args.output.open(summary_mode, newline="", encoding="utf-8") as summary_file:
         writer = csv.DictWriter(summary_file, fieldnames=summary_fieldnames())
         if not (args.append and file_exists):
             writer.writeheader()
 
-        audit_file = (
-            args.audit_jsonl.open(audit_mode, encoding="utf-8")
-            if args.audit_jsonl is not None
-            else None
-        )
+        ctx = mp.get_context("spawn")
+        result_queue = ctx.Queue()
+        workers: list[mp.Process] = []
         try:
             condition_progress = tqdm(
                 total=total_conditions,
@@ -947,69 +986,92 @@ def main() -> int:
                 disable=args.no_progress,
             )
             try:
-                def execute_condition(task_index: int, task: tuple[int, str, str, int, str]):
-                    k, dtype_name, distribution_name, bit, label = task
-                    device_name = device_names[task_index % len(device_names)]
-                    device = devices[task_index % len(devices)]
-                    torch_npu.npu.set_device(device)
-                    result = run_condition(
-                        m=args.m,
-                        n=args.n,
-                        k=k,
-                        dtype_name=dtype_name,
-                        distribution=DISTRIBUTIONS[distribution_name],
-                        bit=bit,
-                        trials=args.trials,
-                        refresh_interval=args.refresh_interval,
-                        p_inject=args.p_inject,
-                        seed=args.seed,
-                        device=device,
-                        block_m=args.block_m,
-                        block_n=args.block_n,
-                        audit_handle=audit_file,
-                        show_progress=False,
-                        progress_label=label,
+                for worker_index, device_name in enumerate(device_names):
+                    worker = ctx.Process(
+                        target=device_worker,
+                        args=(
+                            device_name,
+                            tasks_by_device[worker_index],
+                            worker_config,
+                            result_queue,
+                            str(audit_parts[worker_index])
+                            if audit_parts[worker_index] is not None
+                            else None,
+                        ),
+                        name=f"vabft-{device_name.replace(':', '_')}",
                     )
-                    return task_index, label, device_name, result
+                    worker.start()
+                    workers.append(worker)
 
-                with ThreadPoolExecutor(
-                    max_workers=len(devices), thread_name_prefix="vabft"
-                ) as executor:
-                    futures = [
-                        executor.submit(execute_condition, index, task)
-                        for index, task in enumerate(conditions)
-                    ]
-                    completed = 0
-                    for future in as_completed(futures):
-                        _task_index, label, device_name, result = future.result()
-                        completed += 1
-                        writer.writerow(
-                            {**metadata, "device": device_name, **result}
-                        )
-                        summary_file.flush()
-                        if audit_file is not None:
-                            with AUDIT_WRITE_LOCK:
-                                audit_file.flush()
-                        condition_progress.update(1)
-                        condition_progress.set_postfix_str(
-                            f"{label} on {device_name} row_DR={result['row_DR']}"
-                        )
-                        if args.no_progress:
-                            print(
-                                f"[{completed}/{total_conditions}] {label} "
-                                f"on {device_name} "
-                                f"row_DR={result['row_DR']} "
-                                f"block_DR={result['block_DR']} "
-                                f"loc={result['localization_R']} "
-                                f"row_FPR={result['row_FPR']} "
-                                f"NaN={result['nan_rate']}",
-                                flush=True,
+                completed = 0
+                done_workers = 0
+                while done_workers < len(workers):
+                    try:
+                        message = result_queue.get(timeout=5)
+                    except queue.Empty:
+                        failed = [
+                            worker
+                            for worker in workers
+                            if worker.exitcode not in (None, 0)
+                        ]
+                        if failed:
+                            raise RuntimeError(
+                                "worker process exited unexpectedly: "
+                                + ", ".join(
+                                    f"{worker.name}={worker.exitcode}" for worker in failed
+                                )
                             )
+                        continue
+
+                    kind = message[0]
+                    if kind == "done":
+                        done_workers += 1
+                        continue
+                    if kind == "error":
+                        _, device_name, worker_traceback = message
+                        raise RuntimeError(
+                            f"worker on {device_name} failed:\n{worker_traceback}"
+                        )
+
+                    _, _task_index, label, device_name, result = message
+                    completed += 1
+                    writer.writerow({**metadata, "device": device_name, **result})
+                    summary_file.flush()
+                    condition_progress.update(1)
+                    condition_progress.set_postfix_str(
+                        f"{label} on {device_name} row_DR={result['row_DR']}"
+                    )
+                    if args.no_progress:
+                        print(
+                            f"[{completed}/{total_conditions}] {label} "
+                            f"on {device_name} "
+                            f"row_DR={result['row_DR']} "
+                            f"block_DR={result['block_DR']} "
+                            f"loc={result['localization_R']} "
+                            f"row_FPR={result['row_FPR']} "
+                            f"NaN={result['nan_rate']}",
+                            flush=True,
+                        )
             finally:
                 condition_progress.close()
         finally:
-            if audit_file is not None:
-                audit_file.close()
+            for worker in workers:
+                if worker.is_alive():
+                    worker.terminate()
+            for worker in workers:
+                worker.join()
+            result_queue.close()
+            result_queue.join_thread()
+
+    if args.audit_jsonl is not None:
+        audit_mode = "a" if args.append else "w"
+        with args.audit_jsonl.open(audit_mode, encoding="utf-8") as audit_file:
+            for audit_part in audit_parts:
+                assert audit_part is not None
+                if audit_part.exists():
+                    with audit_part.open("r", encoding="utf-8") as part_file:
+                        shutil.copyfileobj(part_file, audit_file)
+                    audit_part.unlink()
 
     print(f"Results saved to {args.output}")
     if args.audit_jsonl is not None:
