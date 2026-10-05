@@ -1,7 +1,0 @@
-/home/ywc/miniconda3/envs/myLib/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /home/ywc/miniconda3/envs/myLib/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
-  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
-
-Config: M=128, K=1024, N=256
-  N(1e-6,1)   : A-FPR=0.0000% (0/25600) V-FPR=0.0000% (0/25600)  max|D1|/T: A=0.0052 V=0.0547  (n=200)
-  N(1,1)      : A-FPR=0.0000% (0/25600) V-FPR=0.0000% (0/25600)  max|D1|/T: A=0.1448 V=0.3783  (n=200)
-  U(-1,1)     : A-FPR=0.0000% (0/25600) V-FPR=0.0000% (0/25600)  max|D1|/T: A=0.0052 V=0.1070  (n=200)
